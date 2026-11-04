@@ -1,20 +1,48 @@
+<!-- usual HTML setup -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDE B.</title>
+    <!-- script -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>SIDE-B.</title>
 </head>
+
 <body>
-  <h1>side-b.</h1>
-  <main>
-    <div id="photos">
-        <img src="{{ url_for('static', filename='images/Tame Impala.jpeg') }}" alt="Tame Impala">
-        <img src="{{ url_for('static', filename='images/Mac Demarco.jpeg') }}" alt="Mac DeMarco">
-        <img src="{{ url_for('static', filename='images/Sticky Fingers.jpeg') }}" alt="Sticky Fingers">
-    </div>
-  </main> 
+    <!-- branding and navigation -->
+    <header>
+        <h1>SIDE B.</h1>
+        <nav>
+            <a href="/">Home</a>
+            <!-- placeholders -->
+            <a href="#artists">Artists</a>
+            <a href="#merch">Merchandise</a>
+        </nav>
+    </header>
+    
+    <!-- the main event -->
+    <main>
+        <section>
+            <h2>Discover the sound.</h2>
+            <p>Explore the artist.</p>
+        </section>
+        <section>
+            <h2>Explore Artists</h2>
+            <div>
+                <!-- artist profiles will go here -->
+            </div>
+        </section>
+        <section>
+            <h2>Featured Merchandise</h2>
+            <div>
+                <!-- products will go here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 SIDE B. — Educational Project</p>
+    </footer>
 
 </body>
 </html>
