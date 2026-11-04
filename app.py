@@ -1,5 +1,5 @@
 # import flask class
-from flask import Flask
+from flask import Flask, render_template
 
 # initialise flask application
 app = Flask(__name__)
@@ -10,9 +10,9 @@ app = Flask(__name__)
 def home():
 
   # sends a response back to the browser
-  return "Welcome to the b-side home page."
+  return render_template("index.html")
 
 # runs when everything before it is correct
 if __name__ == "__main__":
   # starts the server
-  app.run()
+    app.run(debug=True, port=5001)

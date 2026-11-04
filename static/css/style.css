@@ -1,0 +1,17 @@
+#photos {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  padding: 20px;
+}
+
+#photos img {
+  width: 30%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+}
