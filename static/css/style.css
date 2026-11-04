@@ -1,17 +1,90 @@
-#photos {
+/* css variables assigned as hex colours */
+:root {
+  --background: #151419;
+  --surface: #24222b;
+  --text: #f5f2ed;
+  --accent: #d8a6c8;
+}
+/* add border and padding to each element */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* remove the browser's default outer space settings */ 
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+header {
+  /* allows children to display in a row in the middle */ 
   display: flex;
-  gap: 15px;
-  justify-content: center;
-  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 6%;
 }
 
-#photos img {
-  width: 30%;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  border-radius: 10px;
+nav {
+  /* display nav as row */ 
+  display: flex;
+  gap: 24px;
 }
 
-h1 {
-  text-align: center;
+nav a {
+  /* remove underline */ 
+  color: var(--text);
+  text-decoration: none;
+}
+
+#hero {
+  padding: 120px 6%;
+  min-height: 60vh;
+  background: linear-gradient(
+    90deg,
+    rgba(21, 20, 25, 0.95),
+    rgba(21, 20, 25, 0.4)
+  );
+}
+/* make heading responsive accross devices */ 
+#hero h2 {
+  /* mobile | tablet | desktop */ 
+  font-size: clamp(3rem, 7vw, 6rem);
+  margin: 0;
+}
+
+#hero p {
+  color: var(--accent);
+  font-size: 1.5rem;
+}
+
+#artists, #merch {
+  padding: 60px 6%;
+}
+
+/* grid atrists */ 
+.artist-grid, .product-grid {
+  display: grid;
+  /* each column needs to be 220px wide */ 
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+/* footer section */ 
+footer {
+    padding: 24px 6%;
+    text-align: center;
+    background-color: var(--surface);
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #hero {
+    padding-top: 80px;
+  }
 }
