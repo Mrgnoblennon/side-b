@@ -26,17 +26,53 @@
         <section id="hero">
             <h2>Discover the sound.</h2>
             <p>Explore the artist.</p>
+            <img src="{{ url_for('static', filename="/images/artists/mac-demarco/heroes/hero 1.jpeg") }}" alt="Tame Impala">
         </section>
         <section id="artists">
             <h2>Explore Artists</h2>
-            <div class="artist-grid">
+                <div class="artist-grid">
                 <!-- artist profiles will go here -->
+                <div class="artist-card">
+                  <img src="{{ url_for('static', filename='images/artists/tame-impala/portraits/portrait 1.jpeg') }}" alt="Tame Impala">
+                  <h3>Tame Impala</h3>
+                </div>
+      
+                <div class="artist-card">
+                  <img src="{{ url_for('static', filename='images/artists/mac-demarco/portraits/portrait 1.jpeg') }}" alt="Mac DeMarco">
+                  <h3>Mac DeMarco</h3>
+                </div>
+      
+                <div class="artist-card">
+                  <img src="{{ url_for('static', filename='images/artists/sticky-fingers/portraits/portrait 2.jpeg') }}" alt="Sticky Fingers">
+                  <h3>Sticky Fingers</h3>
+                </div>
             </div>
         </section>
         <section id="merch">
             <h2>Featured Merchandise</h2>
             <div class="product-grid">
                 <!-- products will go here -->
+                <div class="product-card">
+                  <img src="{{ url_for('static', filename='images/artists/tame-impala/merch/merch 1.jpeg') }}"
+                       alt="Tame Impala T-shirt">
+                    <h3>Tame Impala T-Shirt</h3>
+                    <p>$45.00</p>
+                  <button type="button">View Product</button>
+                </div>
+                <div class="product-card">
+                  <img src="{{ url_for('static', filename='images/artists/mac-demarco/merch/merch 1.jpeg') }}"
+                       alt="Mac DeMarco T-shirt">
+                  <h3>Mac DeMarco T-Shirt</h3>
+                  <p>$40.00</p>
+                  <button type="button">View Product</button>
+              </div>
+              <div class="product-card">
+                <img src="{{ url_for('static', filename='images/artists/sticky-fingers/merch/merch 1.jpeg') }}"
+                     alt="Sticky Fingers T-shirt">
+                <h3>Sticky Fingers T-Shirt</h3>
+                <p>$45.00</p>
+                <button type="button">View Product</button>
+              </div>
             </div>
         </section>
     </main>

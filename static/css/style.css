@@ -71,6 +71,25 @@ nav a {
   gap: 24px;
 }
 
+.artist-card {
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: var(--surface);
+}
+
+.artist-card img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.artist-card h3 {
+  padding: 16px;
+  margin: 0;
+}
+
 /* footer section */ 
 footer {
     padding: 24px 6%;
@@ -85,6 +104,43 @@ footer {
   }
 
   #hero {
-    padding-top: 80px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
+}
+
+#hero img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.product-card {
+  background-color: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.product-card h3,
+.product-card p {
+  margin: 16px;
+}
+
+.product-card button {
+  margin-left: 16px;
+  padding: 12px 20px;
+  background-color: var(--accent);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
