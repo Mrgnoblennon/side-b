@@ -63,6 +63,14 @@ nav a {
   padding: 60px 6%;
 }
 
+.product-card {
+  transition: transform 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+}
+
 /* Grid layout for artists and products */
 .artist-grid, .product-grid {
   display: grid;
@@ -154,6 +162,96 @@ nav a {
   transform: translateY(-6px);
 }
 
+.artist-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.artist-link .artist-card {
+  height: 100%;
+}
+
+/* Individual artist hero */
+/* artist hero section */
+.artist-hero {
+
+  /* display text in the middle vertically */
+  display: flex;
+  align-items: center;
+
+  /* hero height adjusts to screen size */
+  min-height: clamp(350px, 45vw, 550px);
+
+  /* add space around the text */
+  padding: 60px 6%;
+
+  /* darken the image behind the text */
+  background-image:
+      linear-gradient(
+          90deg,
+          rgba(21, 20, 25, 0.85),
+          rgba(21, 20, 25, 0.1)
+      ),
+      var(--hero-image);
+
+  /* make the image fill the hero */
+  background-size: cover;
+
+  /* keep the centre of the image visible */
+  background-position: center center;
+
+  /* prevent the image repeating */
+  background-repeat: no-repeat;
+}
+
+/* mobile screens */
+@media (max-width: 600px) {
+
+  .artist-hero {
+
+      /* give the hero more vertical space */
+      min-height: 500px;
+
+      /* keep the image centred */
+      background-position: center center;
+
+      /* reduce space around the text */
+      padding: 40px 6%;
+  }
+}
+
+/* Text content */
+.artist-hero-content {
+  max-width: 650px;
+}
+
+.artist-hero h1 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  margin: 0 0 16px;
+}
+
+.artist-hero h2 {
+  color: var(--accent);
+  font-size: 1.5rem;
+  margin: 0 0 20px;
+}
+
+.artist-hero p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 550px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .artist-hero {
+      min-height: 55vh;
+      padding: 60px 6%;
+      background-position: center;
+  }
+}
+
 /* footer section */ 
 footer {
     padding: 24px 6%;
@@ -210,3 +308,37 @@ footer {
   cursor: pointer;
 }
 
+/* about the artist section */
+.artist-about {
+  background-color: var(--surface);
+  padding: 90px 6%;
+}
+
+/* limit the width of the biography */
+.artist-about-content {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* small pink section heading */
+.section-label {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* biography heading */
+.artist-about h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 20px 0;
+  color: var(--text);
+}
+
+/* biography paragraph */
+.artist-about p {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--text);
+  opacity: 0.85;
+}

@@ -67,7 +67,15 @@ artists = [
         "genre": "Alternative Hip-Hop",
         "description": "British-American rapper and producer celebrated for his intricate wordplay, masked persona and underground hip-hop influence.",
         "image": "images/artists/mf-doom/heroes/hero 1.jpeg",
-        "portrait": "images/artists/mf-doom/portraits/portrait 1.jpeg"
+        "portrait": "images/artists/mf-doom/portraits/portrait 1.jpeg",
+        "biography": (
+            "MF DOOM was a British-American rapper and producer known for "
+            "his intricate lyricism, comic-book-inspired identity and "
+            "distinctive metal mask. Born Daniel Dumile, he became one "
+            "of underground hip-hop's most influential figures. "
+            "His music combined unusual samples, complex rhymes and "
+            "an unmistakable sense of humour."
+        ),
     },
     {
         "id": 8,
@@ -126,6 +134,16 @@ def home():
 @app.route("/artists")
 def artists_page():
     return render_template("artists.html", artists=artists)
+
+@app.route("/artists/<slug>")
+def artist_page(slug):
+
+    # Find the artist matching the URL slug
+    for artist in artists:
+        if artist["slug"] == slug:
+            return render_template("artist.html", artist=artist)
+
+    return "Artist not found", 404
 
 # runs when everything before it is correct
 if __name__ == "__main__":

@@ -11,7 +11,13 @@
 
 <body>
     <header>
-        <!-- Navigation -->
+        <h1>SIDE B.</h1>
+        <nav>
+            <a href="/">Home</a>
+            <!-- placeholders -->
+            <a href="/artists">Artists</a>
+            <a href="#merch">Merchandise</a>
+        </nav>
     </header>
 
     <main class="artists-page">
@@ -19,11 +25,16 @@
 
         <div class="artist-grid">
             {% for artist in artists %}
-                <div class="artist-card">
-                    <img src="{{ url_for('static', filename=artist.portrait) }}" alt="{{ artist.name }}">
-                    <h3>{{ artist.name }}</h3>
-                    <p>{{ artist.genre }}</p>
-                </div>
+        
+                <a href="{{ url_for('artist_page', slug=artist.slug) }}" class="artist-link">
+                    <div class="artist-card">
+                        <img src="{{ url_for('static', filename=artist.portrait) }}" alt="{{ artist.name }}">
+        
+                        <h3>{{ artist.name }}</h3>
+                        <p>{{ artist.genre }}</p>
+                    </div>
+                </a>
+        
             {% endfor %}
         </div>
     </main>
