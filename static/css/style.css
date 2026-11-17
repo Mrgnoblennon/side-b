@@ -63,12 +63,45 @@ nav a {
   padding: 60px 6%;
 }
 
-/* grid atrists */ 
+/* Grid layout for artists and products */
 .artist-grid, .product-grid {
   display: grid;
-  /* each column needs to be 220px wide */ 
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
+}
+
+/* Mobile - 1 column */
+.artist-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Larger phones - 2 columns */
+@media (min-width: 480px) {
+  .artist-grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets - 3 columns */
+@media (min-width: 768px) {
+  .artist-grid {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Desktop - 4 columns */
+@media (min-width: 1200px) {
+  .artist-grid {
+      grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.artists-page {
+  padding: 60px clamp(16px, 6vw, 100px);
+}
+
+/* Keep product grid responsive */
+.product-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .artist-card {
@@ -85,14 +118,46 @@ nav a {
     display: block;
 }
 
+/* More space between artist cards */
+.artist-grid {
+  row-gap: 40px;
+  column-gap: 24px;
+}
+
+/* Artist card */
+.artist-card {
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: var(--surface);
+}
+
+/* Artist name */
 .artist-card h3 {
-  padding: 16px;
   margin: 0;
+  padding: 16px 16px 4px;
+  font-size: 1.25rem;
+}
+
+/* Artist genre */
+.artist-card p {
+  margin: 0;
+  padding: 0 16px 20px;
+  color: #b9b4c0;
+  font-size: 0.9rem;
+}
+
+.artist-card {
+  transition: transform 0.25s ease;
+}
+
+.artist-card:hover {
+  transform: translateY(-6px);
 }
 
 /* footer section */ 
 footer {
     padding: 24px 6%;
+    margin-top: 50px;
     text-align: center;
     background-color: var(--surface);
 }
@@ -144,3 +209,4 @@ footer {
   border-radius: 6px;
   cursor: pointer;
 }
+

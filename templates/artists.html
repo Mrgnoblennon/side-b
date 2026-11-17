@@ -1,0 +1,31 @@
+<!-- usual HTML setup -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDE B.</title>
+    <!-- script -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <!-- Navigation -->
+    </header>
+
+    <main class="artists-page">
+        <h1>Explore Artists</h1>
+
+        <div class="artist-grid">
+            {% for artist in artists %}
+                <div class="artist-card">
+                    <img src="{{ url_for('static', filename=artist.portrait) }}" alt="{{ artist.name }}">
+                    <h3>{{ artist.name }}</h3>
+                    <p>{{ artist.genre }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
