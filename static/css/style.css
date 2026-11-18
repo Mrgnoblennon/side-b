@@ -558,3 +558,50 @@ footer {
       align-items: flex-start;
   }
 }
+
+
+/* featured artist links */
+.artist-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.artist-card h3 {
+  color: #f5f5f5;
+}
+
+/* featured merchandise links */
+.product-card a {
+  display: inline-block;
+  margin: 12px 16px 16px;
+  padding: 12px 20px;
+  background: #8b5cf6;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.product-card a:hover {
+  background: #a78bfa;
+}
+
+/* full shop link */
+.shop-link {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 24px;
+  border: 1px solid #8b5cf6;
+  border-radius: 25px;
+  color: #c4b5fd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.shop-link:hover {
+  background: #8b5cf6;
+  color: #ffffff;
+}
+
