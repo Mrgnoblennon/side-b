@@ -71,9 +71,9 @@
                         <option value="">Select an option</option>
 
                         {% for variant in product.variants %}
-                        <option value="{{ variant }}">
-                            {{ variant }}
-                        </option>
+                        <option value="{{ variant.id }}">
+                          {{ variant.size or variant.edition or variant.fit or variant.option or variant.colour }}
+                         </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -132,7 +132,10 @@
 
                     {% if item.image %}
                     <img src="{{ url_for('static', filename=item.image) }}"
-                         alt="{{ item.name }}">
+                         alt="{{ item.name }}"
+                         onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';"
+                         >
+                         
                     {% else %}
                     <div class="shop-no-image">SIDE-B</div>
                     {% endif %}

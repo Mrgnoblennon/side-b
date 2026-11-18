@@ -1654,48 +1654,28 @@ def artist_page(slug):
 
 
 # get all products from the artists dictionary
+
+# get all merchandise from the artists dictionary
 def get_products():
     products = []
 
-    # artists can be stored as a list or dictionary
-    artist_list = artists.values() if isinstance(artists, dict) else artists
+    # loop through each artist
+    for artist in artists:
 
-    for artist in artist_list:
-        artist_name = artist.get("name", "Unknown Artist")
+        # loop through the artist's merchandise
+        for product in artist["merch"]:
 
-        # get the merchandise categories
-        categories = artist.get("merch", artist.get("merchandise", {}))
+            # copy the product without changing the original
+            item = product.copy()
 
-        if isinstance(categories, dict):
-            category_list = categories.items()
-        else:
-            category_list = []
+            # add the artist name
+            item["artist"] = artist["name"]
 
-            for category in categories:
-                category_name = category.get("name", "Merch")
-                category_products = category.get("products", [])
-                category_list.append((category_name, category_products))
-
-        # loop through each category
-        for category_name, category_products in category_list:
-
-            if isinstance(category_products, dict):
-                category_products = category_products.values()
-
-            for product in category_products:
-                # copy product data without changing the original
-                item = product.copy()
-
-                item["artist"] = artist_name
-                item["category"] = category_name
-
-                # use the first image if the product has a gallery
-                images = item.get("images", [])
-                item["image"] = item.get("image", images[0] if images else "")
-
-                products.append(item)
+            # add the product to the list
+            products.append(item)
 
     return products
+
 
 
 # merch shop page
@@ -1734,6 +1714,8 @@ def product_detail(product_id):
         (product for product in products if str(product.get("id")) == str(product_id)),
         None
     )
+
+    print("PRODUCT IDS:", [product.get("id") for product in products])
 
     if product is None:
         abort(404)

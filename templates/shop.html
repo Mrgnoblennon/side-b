@@ -37,7 +37,9 @@
 
                 {% if product.image %}
                 <img src="{{ url_for('static', filename=product.image) }}"
-                     alt="{{ product.name }}">
+                     alt="{{ product.name }}"
+                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';"
+                     >
                 {% else %}
                 <div class="shop-no-image">SIDE-B</div>
                 {% endif %}
