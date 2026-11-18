@@ -28,12 +28,16 @@
         
                 <a href="{{ url_for('artist_page', slug=artist.slug) }}" class="artist-link">
                     <div class="artist-card">
-                        <img src="{{ url_for('static', filename=artist.portrait) }}" alt="{{ artist.name }}">
+                        <img
+                            src="{{ url_for('static', filename=artist.portrait) }}"
+                            alt="{{ artist.name }}"
+                            onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholders/artist-placeholder.png') }}';"
+                        >
         
                         <h3>{{ artist.name }}</h3>
                         <p>{{ artist.genre }}</p>
                     </div>
-                </a>
+                </a>    
         
             {% endfor %}
         </div>

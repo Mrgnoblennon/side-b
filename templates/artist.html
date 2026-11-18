@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ artist.name }} | SIDE B.</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="/static/js/script.js" defer></script>
 </head>
 
 <body>
-  <header>
+    <header>
         <h1>SIDE B.</h1>
         <nav>
             <a href="/">Home</a>
@@ -17,19 +18,17 @@
             <a href="#merch">Merchandise</a>
         </nav>
     </header>
-  <main class="artist-detail-page">
+    <main class="artist-detail-page">
 
     <section class="artist-hero"
     style="background-image: url('{{ url_for('static', filename=artist.image) }}');"
     >
 
-      <div class="artist-hero-content">
-          <h1>{{ artist.name }}</h1>
-          <h2>{{ artist.genre }}</h2>
-          <p>{{ artist.description }}</p>
-      </div>
-
-      
+        <div class="artist-hero-content">
+            <h1>{{ artist.name }}</h1>
+            <h2>{{ artist.genre }}</h2>
+            <p>{{ artist.description }}</p>
+        </div>
 
     </section>
 
@@ -50,34 +49,100 @@
       </div>
 
     </section>
+
     
-    <section id="merch">
-      <h2>Featured Merchandise</h2>
-      <div class="product-grid">
-          <!-- products will go here -->
-          <div class="product-card">
-            <img src="{{ url_for('static', filename='images/artists/tame-impala/merch/merch 1.jpeg') }}"
-                 alt="Tame Impala T-shirt">
-              <h3>Tame Impala T-Shirt</h3>
-              <p>$45.00</p>
-            <button type="button">View Product</button>
+    <!-- artist gallery -->
+    <section class="artist-gallery">
+      <div class="artist-gallery-content">
+
+          <span class="section-label">02 / THE GALLERY</span>
+          <h2>{{ artist.name }} Gallery</h2>
+
+          <div class="gallery-grid">
+              {% for image in artist.gallery %}
+
+                  <img
+                      src="{{ url_for('static', filename=image) }}"
+                      alt="{{ artist.name }} gallery image"
+                      class="gallery-image"
+                      onclick="openGallery(this.src)"
+                      onerror="this.onerror=null; this.src='{{ url_for('static', filename='/images/placeholders/artist-placeholder.png') }}';"
+                  >
+
+              {% endfor %}
           </div>
-          <div class="product-card">
-            <img src="{{ url_for('static', filename='images/artists/mac-demarco/merch/merch 1.jpeg') }}"
-                 alt="Mac DeMarco T-shirt">
-            <h3>Mac DeMarco T-Shirt</h3>
-            <p>$40.00</p>
-            <button type="button">View Product</button>
-        </div>
-        <div class="product-card">
-          <img src="{{ url_for('static', filename='images/artists/sticky-fingers/merch/merch 1.jpeg') }}"
-               alt="Sticky Fingers T-shirt">
-          <h3>Sticky Fingers T-Shirt</h3>
-          <p>$45.00</p>
-          <button type="button">View Product</button>
-        </div>
+
       </div>
-  </section>
+    </section>
+
+
+    <!-- enlarged image overlay -->
+    <div id="gallery-modal" class="gallery-modal" onclick="closeGallery()">
+
+      <!-- enlarged image -->
+      <img id="gallery-modal-image" alt="Enlarged gallery image">
+
+    </div>
+        
+    <!-- artist merchandise section -->
+    <section class="artist-merch">
+
+        <div class="artist-merch-content">
+
+            <!-- section heading -->
+            <span class="section-label">03 / THE COLLECTION</span>
+
+            <div class="merch-heading">
+
+                <h2>{{ artist.name }} Merchandise</h2>
+
+                <!-- carousel navigation buttons -->
+                <div class="merch-controls">
+                    <button type="button" onclick="scrollMerch(-1)" aria-label="Previous products">
+                        &#8592;
+                    </button>
+
+                    <button type="button" onclick="scrollMerch(1)" aria-label="Next products">
+                        &#8594;
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- scrollable product container -->
+            <div class="merch-carousel" id="merch-carousel">
+
+                {% for product in artist.get('merch', []) %}
+
+                <div class="merch-card">
+
+                    <!-- product image -->
+                    <img
+                        src="{{ url_for('static', filename=product.image) }}"
+                        alt="{{ product.name }}"
+                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='/images/placeholders/product-placeholder.png') }}';"
+                    >
+
+                    <!-- product information -->
+                    <div class="merch-card-info">
+                        <h3>{{ product.name }}</h3>
+                        <p>${{ "%.2f"|format(product.price) }}</p>
+                    </div>
+
+                    <!-- button for future cart functionality -->
+                    <button type="button" class="merch-add-button" disabled>
+                        Coming Soon
+                    </button>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
 
   </main>
 </body>
