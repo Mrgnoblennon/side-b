@@ -31,7 +31,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Tame Impala.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/tame-impala/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/tame-impala/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "1-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "1-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "1-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "1-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "1-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 2,
@@ -41,7 +48,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Tame Impala.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/tame-impala/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/tame-impala/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "2-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "2-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "2-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "2-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "2-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 3,
@@ -51,7 +65,10 @@ artists = [
                 "description": 'Sample hats merchandise for Tame Impala.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/tame-impala/merch/hats/hat 1.jpeg"
+                "image": "images/artists/tame-impala/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "3-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 4,
@@ -61,7 +78,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Tame Impala.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/tame-impala/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/tame-impala/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "4-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 5,
@@ -71,7 +91,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Tame Impala.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/tame-impala/merch/artwork/art 1.jpeg"
+                "image": "images/artists/tame-impala/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "5-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "5-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "5-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 6,
@@ -81,7 +106,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Tame Impala.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/tame-impala/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/tame-impala/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "6-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 7,
@@ -91,7 +119,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Tame Impala.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/tame-impala/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/tame-impala/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "7-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "7-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "7-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "7-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "7-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 8,
@@ -101,7 +136,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Tame Impala.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/tame-impala/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/tame-impala/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "8-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -128,7 +166,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Mac DeMarco.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/mac-demarco/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "9-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "9-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "9-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "9-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "9-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 10,
@@ -138,7 +183,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Mac DeMarco.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/mac-demarco/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "10-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "10-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "10-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "10-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "10-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 11,
@@ -148,7 +200,10 @@ artists = [
                 "description": 'Sample hats merchandise for Mac DeMarco.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/mac-demarco/merch/hats/hat 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "11-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 12,
@@ -158,7 +213,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Mac DeMarco.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/mac-demarco/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "12-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 13,
@@ -168,7 +226,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Mac DeMarco.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/mac-demarco/merch/artwork/art 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "13-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "13-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "13-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 14,
@@ -178,7 +241,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Mac DeMarco.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/mac-demarco/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "14-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 15,
@@ -188,7 +254,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Mac DeMarco.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/mac-demarco/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "15-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "15-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "15-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "15-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "15-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 16,
@@ -198,7 +271,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Mac DeMarco.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/mac-demarco/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "16-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -225,7 +301,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Sticky Fingers.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/sticky-fingers/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "17-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "17-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "17-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "17-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "17-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 18,
@@ -235,7 +318,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Sticky Fingers.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/sticky-fingers/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "18-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "18-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "18-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "18-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "18-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 19,
@@ -245,7 +335,10 @@ artists = [
                 "description": 'Sample hats merchandise for Sticky Fingers.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/sticky-fingers/merch/hats/hat 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "19-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 20,
@@ -255,7 +348,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Sticky Fingers.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/sticky-fingers/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "20-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 21,
@@ -265,7 +361,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Sticky Fingers.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/sticky-fingers/merch/artwork/art 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "21-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "21-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "21-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 22,
@@ -275,7 +376,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Sticky Fingers.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/sticky-fingers/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "22-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 23,
@@ -285,7 +389,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Sticky Fingers.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/sticky-fingers/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "23-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "23-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "23-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "23-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "23-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 24,
@@ -295,7 +406,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Sticky Fingers.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/sticky-fingers/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "24-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -322,7 +436,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Frank Ocean.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/frank-ocean/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "25-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "25-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "25-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "25-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "25-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 26,
@@ -332,7 +453,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Frank Ocean.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/frank-ocean/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "26-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "26-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "26-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "26-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "26-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 27,
@@ -342,7 +470,10 @@ artists = [
                 "description": 'Sample hats merchandise for Frank Ocean.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/frank-ocean/merch/hats/hat 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "27-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 28,
@@ -352,7 +483,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Frank Ocean.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/frank-ocean/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "28-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 29,
@@ -362,7 +496,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Frank Ocean.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/frank-ocean/merch/artwork/art 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "29-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "29-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "29-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 30,
@@ -372,7 +511,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Frank Ocean.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/frank-ocean/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "30-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 31,
@@ -382,7 +524,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Frank Ocean.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/frank-ocean/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "31-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "31-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "31-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "31-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "31-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 32,
@@ -392,7 +541,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Frank Ocean.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/frank-ocean/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "32-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -419,7 +571,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Khruangbin.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/khruangbin/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/khruangbin/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "33-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "33-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "33-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "33-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "33-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 34,
@@ -429,7 +588,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Khruangbin.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/khruangbin/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/khruangbin/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "34-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "34-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "34-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "34-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "34-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 35,
@@ -439,7 +605,10 @@ artists = [
                 "description": 'Sample hats merchandise for Khruangbin.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/khruangbin/merch/hats/hat 1.jpeg"
+                "image": "images/artists/khruangbin/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "35-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 36,
@@ -449,7 +618,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Khruangbin.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/khruangbin/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/khruangbin/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "36-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 37,
@@ -459,7 +631,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Khruangbin.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/khruangbin/merch/artwork/art 1.jpeg"
+                "image": "images/artists/khruangbin/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "37-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "37-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "37-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 38,
@@ -469,7 +646,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Khruangbin.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/khruangbin/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/khruangbin/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "38-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 39,
@@ -479,7 +659,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Khruangbin.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/khruangbin/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/khruangbin/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "39-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "39-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "39-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "39-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "39-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 40,
@@ -489,7 +676,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Khruangbin.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/khruangbin/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/khruangbin/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "40-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -516,7 +706,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Men I Trust.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/men-i-trust/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "41-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "41-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "41-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "41-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "41-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 42,
@@ -526,7 +723,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Men I Trust.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/men-i-trust/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "42-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "42-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "42-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "42-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "42-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 43,
@@ -536,7 +740,10 @@ artists = [
                 "description": 'Sample hats merchandise for Men I Trust.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/men-i-trust/merch/hats/hat 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "43-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 44,
@@ -546,7 +753,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Men I Trust.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/men-i-trust/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "44-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 45,
@@ -556,7 +766,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Men I Trust.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/men-i-trust/merch/artwork/art 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "45-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "45-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "45-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 46,
@@ -566,7 +781,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Men I Trust.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/men-i-trust/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "46-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 47,
@@ -576,7 +794,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Men I Trust.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/men-i-trust/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "47-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "47-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "47-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "47-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "47-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 48,
@@ -586,7 +811,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Men I Trust.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/men-i-trust/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "48-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -613,7 +841,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for MF DOOM.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/mf-doom/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/mf-doom/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "49-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "49-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "49-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "49-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "49-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 50,
@@ -623,7 +858,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for MF DOOM.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/mf-doom/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/mf-doom/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "50-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "50-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "50-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "50-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "50-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 51,
@@ -633,7 +875,10 @@ artists = [
                 "description": 'Sample hats merchandise for MF DOOM.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/mf-doom/merch/hats/hat 1.jpeg"
+                "image": "images/artists/mf-doom/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "51-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 52,
@@ -643,7 +888,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for MF DOOM.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/mf-doom/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/mf-doom/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "52-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 53,
@@ -653,7 +901,12 @@ artists = [
                 "description": 'Sample artwork merchandise for MF DOOM.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/mf-doom/merch/artwork/art 1.jpeg"
+                "image": "images/artists/mf-doom/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "53-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "53-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "53-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 54,
@@ -663,7 +916,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for MF DOOM.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/mf-doom/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/mf-doom/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "54-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 55,
@@ -673,7 +929,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for MF DOOM.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/mf-doom/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/mf-doom/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "55-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "55-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "55-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "55-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "55-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 56,
@@ -683,7 +946,10 @@ artists = [
                 "description": 'Sample accessories merchandise for MF DOOM.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/mf-doom/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/mf-doom/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "56-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -710,7 +976,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for PinkPantheress.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/pink-pantheress/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "57-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "57-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "57-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "57-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "57-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 58,
@@ -720,7 +993,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for PinkPantheress.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/pink-pantheress/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "58-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "58-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "58-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "58-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "58-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 59,
@@ -730,7 +1010,10 @@ artists = [
                 "description": 'Sample hats merchandise for PinkPantheress.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/pink-pantheress/merch/hats/hat 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "59-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 60,
@@ -740,7 +1023,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for PinkPantheress.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/pink-pantheress/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "60-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 61,
@@ -750,7 +1036,12 @@ artists = [
                 "description": 'Sample artwork merchandise for PinkPantheress.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/pink-pantheress/merch/artwork/art 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "61-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "61-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "61-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 62,
@@ -760,7 +1051,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for PinkPantheress.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/pink-pantheress/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "62-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 63,
@@ -770,7 +1064,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for PinkPantheress.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/pink-pantheress/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "63-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "63-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "63-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "63-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "63-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 64,
@@ -780,7 +1081,10 @@ artists = [
                 "description": 'Sample accessories merchandise for PinkPantheress.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/pink-pantheress/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "64-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -807,7 +1111,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Dope Lemon.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/dope-lemon/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "65-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "65-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "65-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "65-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "65-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 66,
@@ -817,7 +1128,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Dope Lemon.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/dope-lemon/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "66-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "66-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "66-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "66-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "66-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 67,
@@ -827,7 +1145,10 @@ artists = [
                 "description": 'Sample hats merchandise for Dope Lemon.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/dope-lemon/merch/hats/hat 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "67-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 68,
@@ -837,7 +1158,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Dope Lemon.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/dope-lemon/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "68-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 69,
@@ -847,7 +1171,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Dope Lemon.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/dope-lemon/merch/artwork/art 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "69-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "69-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "69-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 70,
@@ -857,7 +1186,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Dope Lemon.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/dope-lemon/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "70-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 71,
@@ -867,7 +1199,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Dope Lemon.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/dope-lemon/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "71-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "71-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "71-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "71-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "71-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 72,
@@ -877,7 +1216,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Dope Lemon.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/dope-lemon/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "72-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -904,7 +1246,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Kaytranada.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/kaytranada/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/kaytranada/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "73-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "73-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "73-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "73-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "73-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 74,
@@ -914,7 +1263,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Kaytranada.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/kaytranada/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/kaytranada/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "74-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "74-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "74-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "74-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "74-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 75,
@@ -924,7 +1280,10 @@ artists = [
                 "description": 'Sample hats merchandise for Kaytranada.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/kaytranada/merch/hats/hat 1.jpeg"
+                "image": "images/artists/kaytranada/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "75-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 76,
@@ -934,7 +1293,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Kaytranada.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/kaytranada/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/kaytranada/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "76-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 77,
@@ -944,7 +1306,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Kaytranada.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/kaytranada/merch/artwork/art 1.jpeg"
+                "image": "images/artists/kaytranada/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "77-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "77-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "77-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 78,
@@ -954,7 +1321,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Kaytranada.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/kaytranada/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/kaytranada/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "78-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 79,
@@ -964,7 +1334,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Kaytranada.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/kaytranada/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/kaytranada/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "79-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "79-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "79-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "79-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "79-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 80,
@@ -974,7 +1351,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Kaytranada.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/kaytranada/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/kaytranada/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "80-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -1001,7 +1381,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Tyler, the Creator.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/tyler-the-creator/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "81-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "81-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "81-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "81-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "81-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 82,
@@ -1011,7 +1398,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Tyler, the Creator.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/tyler-the-creator/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "82-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "82-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "82-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "82-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "82-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 83,
@@ -1021,7 +1415,10 @@ artists = [
                 "description": 'Sample hats merchandise for Tyler, the Creator.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/tyler-the-creator/merch/hats/hat 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "83-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 84,
@@ -1031,7 +1428,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Tyler, the Creator.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/tyler-the-creator/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "84-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 85,
@@ -1041,7 +1441,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Tyler, the Creator.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/tyler-the-creator/merch/artwork/art 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "85-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "85-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "85-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 86,
@@ -1051,7 +1456,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Tyler, the Creator.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/tyler-the-creator/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "86-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 87,
@@ -1061,7 +1469,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Tyler, the Creator.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/tyler-the-creator/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "87-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "87-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "87-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "87-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "87-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 88,
@@ -1071,7 +1486,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Tyler, the Creator.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/tyler-the-creator/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "88-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
@@ -1098,7 +1516,14 @@ artists = [
                 "description": 'Sample t shirts merchandise for Lorde.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/lorde/merch/t-shirts/t-shirt 1.jpeg"
+                "image": "images/artists/lorde/merch/t-shirts/t-shirt 1.jpeg",
+                "variants": [
+                    {"id": "89-V01", "size": 'S', "colour": 'Black', "stock": 4},
+                    {"id": "89-V02", "size": 'M', "colour": 'Black', "stock": 4},
+                    {"id": "89-V03", "size": 'L', "colour": 'Black', "stock": 4},
+                    {"id": "89-V04", "size": 'XL', "colour": 'Black', "stock": 4},
+                    {"id": "89-V05", "size": 'XXL', "colour": 'Black', "stock": 4}
+                ]
             },
             {
                 "id": 90,
@@ -1108,7 +1533,14 @@ artists = [
                 "description": 'Sample hoodies merchandise for Lorde.',
                 "price": 79.99,
                 "stock": 15,
-                "image": "images/artists/lorde/merch/hoodies/hoodie 1.jpeg"
+                "image": "images/artists/lorde/merch/hoodies/hoodie 1.jpeg",
+                "variants": [
+                    {"id": "90-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "90-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "90-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "90-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "90-V05", "size": 'XXL', "colour": 'Black', "stock": 3}
+                ]
             },
             {
                 "id": 91,
@@ -1118,7 +1550,10 @@ artists = [
                 "description": 'Sample hats merchandise for Lorde.',
                 "price": 29.99,
                 "stock": 12,
-                "image": "images/artists/lorde/merch/hats/hat 1.jpeg"
+                "image": "images/artists/lorde/merch/hats/hat 1.jpeg",
+                "variants": [
+                    {"id": "91-V01", "colour": 'Black', "fit": 'Adjustable', "stock": 12}
+                ]
             },
             {
                 "id": 92,
@@ -1128,7 +1563,10 @@ artists = [
                 "description": 'Sample vinyl merchandise for Lorde.',
                 "price": 49.99,
                 "stock": 10,
-                "image": "images/artists/lorde/merch/vinyl/vinyl 1.jpeg"
+                "image": "images/artists/lorde/merch/vinyl/vinyl 1.jpeg",
+                "variants": [
+                    {"id": "92-V01", "edition": 'Standard', "colour": 'Black', "stock": 10}
+                ]
             },
             {
                 "id": 93,
@@ -1138,7 +1576,12 @@ artists = [
                 "description": 'Sample artwork merchandise for Lorde.',
                 "price": 24.99,
                 "stock": 25,
-                "image": "images/artists/lorde/merch/artwork/art 1.jpeg"
+                "image": "images/artists/lorde/merch/artwork/art 1.jpeg",
+                "variants": [
+                    {"id": "93-V01", "size": 'A4', "finish": 'Unframed', "stock": 9},
+                    {"id": "93-V02", "size": 'A3', "finish": 'Unframed', "stock": 8},
+                    {"id": "93-V03", "size": 'A2', "finish": 'Unframed', "stock": 8}
+                ]
             },
             {
                 "id": 94,
@@ -1148,7 +1591,10 @@ artists = [
                 "description": 'Sample tote bags merchandise for Lorde.',
                 "price": 24.99,
                 "stock": 18,
-                "image": "images/artists/lorde/merch/tote-bags/tote 1.jpeg"
+                "image": "images/artists/lorde/merch/tote-bags/tote 1.jpeg",
+                "variants": [
+                    {"id": "94-V01", "colour": 'Natural', "stock": 18}
+                ]
             },
             {
                 "id": 95,
@@ -1158,7 +1604,14 @@ artists = [
                 "description": 'Sample sweatshirts merchandise for Lorde.',
                 "price": 64.99,
                 "stock": 14,
-                "image": "images/artists/lorde/merch/sweatshirts/sweatshirt 1.jpeg"
+                "image": "images/artists/lorde/merch/sweatshirts/sweatshirt 1.jpeg",
+                "variants": [
+                    {"id": "95-V01", "size": 'S', "colour": 'Black', "stock": 3},
+                    {"id": "95-V02", "size": 'M', "colour": 'Black', "stock": 3},
+                    {"id": "95-V03", "size": 'L', "colour": 'Black', "stock": 3},
+                    {"id": "95-V04", "size": 'XL', "colour": 'Black', "stock": 3},
+                    {"id": "95-V05", "size": 'XXL', "colour": 'Black', "stock": 2}
+                ]
             },
             {
                 "id": 96,
@@ -1168,7 +1621,10 @@ artists = [
                 "description": 'Sample accessories merchandise for Lorde.',
                 "price": 9.99,
                 "stock": 40,
-                "image": "images/artists/lorde/merch/accessories/stickers 1.jpeg"
+                "image": "images/artists/lorde/merch/accessories/stickers 1.jpeg",
+                "variants": [
+                    {"id": "96-V01", "option": 'Sticker pack', "stock": 40}
+                ]
             },
         ]
     },
