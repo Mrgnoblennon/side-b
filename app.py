@@ -31,7 +31,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Tame Impala.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/tame-impala/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/tame-impala/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 2,
@@ -128,7 +128,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Mac DeMarco.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/mac-demarco/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/mac-demarco/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 10,
@@ -225,7 +225,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Sticky Fingers.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/sticky-fingers/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/sticky-fingers/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 18,
@@ -322,7 +322,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Frank Ocean.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/frank-ocean/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/frank-ocean/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 26,
@@ -419,7 +419,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Khruangbin.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/khruangbin/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/khruangbin/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 34,
@@ -516,7 +516,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Men I Trust.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/men-i-trust/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/men-i-trust/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 42,
@@ -613,7 +613,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for MF DOOM.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/mf-doom/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/mf-doom/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 50,
@@ -710,7 +710,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for PinkPantheress.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/pink-pantheress/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/pink-pantheress/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 58,
@@ -807,7 +807,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Dope Lemon.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/dope-lemon/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/dope-lemon/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 66,
@@ -904,7 +904,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Kaytranada.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/kaytranada/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/kaytranada/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 74,
@@ -1001,7 +1001,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Tyler, the Creator.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/tyler-the-creator/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/tyler-the-creator/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 82,
@@ -1098,7 +1098,7 @@ artists = [
                 "description": 'Sample t shirts merchandise for Lorde.',
                 "price": 39.99,
                 "stock": 20,
-                "image": "images/artists/lorde/merch/t-shirts/shirt 1.jpeg"
+                "image": "images/artists/lorde/merch/t-shirts/t-shirt 1.jpeg"
             },
             {
                 "id": 90,
@@ -1173,6 +1173,7 @@ artists = [
         ]
     },
 ]
+
 
 # home route for sending recieving requests, connects the homepage url
 @app.route("/")
