@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="shop-page">
+
+    <!-- shop heading -->
+    <section class="shop-hero">
+        <p class="shop-eyebrow">SIDE-B COLLECTIONS</p>
+        <h1>Merch Shop</h1>
+        <p>Discover merchandise from your favourite artists.</p>
+    </section>
+
+    <!-- category filters -->
+    <section class="shop-filters">
+        <a href="{{ url_for('merch_shop') }}"
+           class="shop-filter {% if selected_category == 'All' %}active{% endif %}">
+            All
+        </a>
+
+        {% for category in categories %}
+        <a href="{{ url_for('merch_shop', category=category) }}"
+           class="shop-filter {% if selected_category == category %}active{% endif %}">
+            {{ category | replace('_', ' ') | title }}
+        </a>
+        {% endfor %}
+    </section>
+
+    <!-- product grid -->
+    <section class="shop-grid">
+
+        {% for product in products %}
+        <article class="shop-card">
+
+            <a href="{{ url_for('product_detail', product_id=product.id) }}"
+               class="shop-card-image">
+
+                {% if product.image %}
+                <img src="{{ url_for('static', filename=product.image) }}"
+                     alt="{{ product.name }}">
+                {% else %}
+                <div class="shop-no-image">SIDE-B</div>
+                {% endif %}
+
+            </a>
+
+            <div class="shop-card-content">
+                <p class="shop-card-artist">{{ product.artist }}</p>
+                <h2>{{ product.name }}</h2>
+
+                <div class="shop-card-bottom">
+                    <span class="shop-card-price">
+                        ${{ "%.2f"|format(product.price|float) }}
+                    </span>
+
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}"
+                       class="shop-card-button">
+                        View Product
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        {% else %}
+        <p class="shop-empty">No products found in this category.</p>
+        {% endfor %}
+
+    </section>
+
+</main>
+
+{% endblock %}

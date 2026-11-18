@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="product-page">
+
+    <!-- back button -->
+    <a href="{{ url_for('merch_shop') }}" class="product-back">
+        ← Back to Merch Shop
+    </a>
+
+    <section class="product-layout">
+
+        <!-- product images -->
+        <div class="product-gallery">
+
+            <div class="product-main-image">
+                {% if product.image %}
+                <img id="mainProductImage"
+                     src="{{ url_for('static', filename=product.image) }}"
+                     alt="{{ product.name }}">
+                {% else %}
+                <div class="shop-no-image">SIDE-B</div>
+                {% endif %}
+            </div>
+
+            <!-- image thumbnails -->
+            {% if product.images %}
+            <div class="product-thumbnails">
+
+                {% for image in product.images %}
+                <button type="button"
+                        class="product-thumbnail {% if loop.first %}active{% endif %}"
+                        data-image="{{ url_for('static', filename=image) }}">
+
+                    <img src="{{ url_for('static', filename=image) }}"
+                         alt="{{ product.name }} image {{ loop.index }}">
+                </button>
+                {% endfor %}
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- product information -->
+        <div class="product-info">
+
+            <span class="product-artist">{{ product.artist }}</span>
+
+            <h1>{{ product.name }}</h1>
+
+            <p class="product-price">
+                ${{ "%.2f"|format(product.price|float) }}
+            </p>
+
+            <p class="product-description">
+                {{ product.description | default('Officially inspired merchandise for music lovers.', true) }}
+            </p>
+
+            <!-- product options -->
+            <form id="productForm">
+
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                {% if product.variants %}
+                <div class="product-option">
+                    <label for="productVariant">Choose an option</label>
+
+                    <select id="productVariant" name="variant" required>
+                        <option value="">Select an option</option>
+
+                        {% for variant in product.variants %}
+                        <option value="{{ variant }}">
+                            {{ variant }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <!-- quantity selector -->
+                <div class="product-option">
+                    <label for="productQuantity">Quantity</label>
+
+                    <div class="quantity-control">
+                        <button type="button" id="decreaseQuantity">−</button>
+
+                        <input type="number"
+                               id="productQuantity"
+                               name="quantity"
+                               value="1"
+                               min="1"
+                               max="99"
+                               readonly>
+
+                        <button type="button" id="increaseQuantity">+</button>
+                    </div>
+                </div>
+
+                <!-- cart button -->
+                <button type="submit" class="product-add-cart">
+                    Add to Cart
+                </button>
+
+            </form>
+
+            <p class="product-cart-message" id="cartMessage" aria-live="polite"></p>
+
+            <div class="product-extra">
+                <span>♫ SIDE-B Merchandise</span>
+                <span>Secure simulated checkout</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- related merchandise -->
+    {% if related_products %}
+    <section class="related-products">
+
+        <h2>You Might Also Like</h2>
+
+        <div class="shop-grid">
+
+            {% for item in related_products %}
+            <article class="shop-card">
+
+                <a href="{{ url_for('product_detail', product_id=item.id) }}"
+                   class="shop-card-image">
+
+                    {% if item.image %}
+                    <img src="{{ url_for('static', filename=item.image) }}"
+                         alt="{{ item.name }}">
+                    {% else %}
+                    <div class="shop-no-image">SIDE-B</div>
+                    {% endif %}
+
+                </a>
+
+                <div class="shop-card-content">
+                    <p class="shop-card-artist">{{ item.artist }}</p>
+                    <h3>{{ item.name }}</h3>
+
+                    <div class="shop-card-bottom">
+                        <span class="shop-card-price">
+                            ${{ "%.2f"|format(item.price|float) }}
+                        </span>
+
+                        <a href="{{ url_for('product_detail', product_id=item.id) }}"
+                           class="shop-card-button">
+                            View
+                        </a>
+                    </div>
+                </div>
+
+            </article>
+            {% endfor %}
+
+        </div>
+    </section>
+    {% endif %}
+
+</main>
+
+<script src="{{ url_for('static', filename='js/product.js') }}"></script>
+
+{% endblock %}

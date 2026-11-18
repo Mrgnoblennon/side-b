@@ -1,5 +1,5 @@
 # import flask class
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, abort
 import os
 
 # initialise flask application
@@ -1651,6 +1651,106 @@ def artist_page(slug):
             return render_template("artist.html", artist=artist)
 
     return "Artist not found", 404
+
+
+# get all products from the artists dictionary
+def get_products():
+    products = []
+
+    # artists can be stored as a list or dictionary
+    artist_list = artists.values() if isinstance(artists, dict) else artists
+
+    for artist in artist_list:
+        artist_name = artist.get("name", "Unknown Artist")
+
+        # get the merchandise categories
+        categories = artist.get("merch", artist.get("merchandise", {}))
+
+        if isinstance(categories, dict):
+            category_list = categories.items()
+        else:
+            category_list = []
+
+            for category in categories:
+                category_name = category.get("name", "Merch")
+                category_products = category.get("products", [])
+                category_list.append((category_name, category_products))
+
+        # loop through each category
+        for category_name, category_products in category_list:
+
+            if isinstance(category_products, dict):
+                category_products = category_products.values()
+
+            for product in category_products:
+                # copy product data without changing the original
+                item = product.copy()
+
+                item["artist"] = artist_name
+                item["category"] = category_name
+
+                # use the first image if the product has a gallery
+                images = item.get("images", [])
+                item["image"] = item.get("image", images[0] if images else "")
+
+                products.append(item)
+
+    return products
+
+
+# merch shop page
+@app.route("/shop")
+def merch_shop():
+    products = get_products()
+
+    # get the selected category from the url
+    selected_category = request.args.get("category", "All")
+
+    # collect unique categories
+    categories = sorted(set(product["category"] for product in products))
+
+    # filter products by category
+    if selected_category != "All":
+        products = [
+            product for product in products
+            if product["category"] == selected_category
+        ]
+
+    return render_template(
+        "shop.html",
+        products=products,
+        categories=categories,
+        selected_category=selected_category
+    )
+
+
+# individual product page
+@app.route("/shop/<int:product_id>")
+def product_detail(product_id):
+    products = get_products()
+
+    # find the product using its id
+    product = next(
+        (product for product in products if str(product.get("id")) == str(product_id)),
+        None
+    )
+
+    if product is None:
+        abort(404)
+
+    # get other products from the same artist
+    related_products = [
+        item for item in products
+        if item["artist"] == product["artist"]
+        and str(item.get("id")) != str(product_id)
+    ][:4]
+
+    return render_template(
+        "product.html",
+        product=product,
+        related_products=related_products
+    )
+
 
 # runs when everything before it is correct
 if __name__ == "__main__":
