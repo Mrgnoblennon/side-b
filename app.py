@@ -323,6 +323,7 @@ def admin_edit_product(product_id):
         fields = {key: request.form.get(key, "") for key in ("name", "colour", "price", "stock")}
         variant_stock = {str(v["id"]): request.form.get("stock_" + str(v["id"]), "") for v in product["variants"]}
         try:
+            fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (product.get("image") or ""))
             update_product(product_id, fields, variant_stock)
         except ValueError as exc:
             flash(str(exc))
@@ -380,9 +381,11 @@ def admin_artist_form(artist_id=None):
         try:
             fields = {key: request.form.get(key, "") for key in
                       ("name", "slug", "genre", "description", "biography")}
-            fields["image"] = store_image(request.files.get("image"), artist["image"] if artist else "")
-            fields["portrait"] = store_image(request.files.get("portrait"), artist["portrait"] if artist else "")
-            gallery = list(artist["gallery"]) if artist else []
+            fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (artist["image"] if artist else ""))
+            fields["portrait"] = store_image(request.files.get("portrait"), "" if request.form.get("remove_portrait") == "1" else (artist["portrait"] if artist else ""))
+            existing_gallery = list(artist["gallery"]) if artist else []
+            removed = set(request.form.getlist("remove_gallery"))
+            gallery = [path for path in existing_gallery if path not in removed]
             gallery.extend(store_image(upload) for upload in request.files.getlist("gallery") if upload.filename)
             fields["gallery"] = gallery
             saved_id = save_artist(fields, artist_id)
