@@ -3,7 +3,10 @@ from flask import Flask, render_template, url_for, request, abort, session, redi
 import os
 import hmac
 import secrets
-from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product
+from pathlib import Path
+from uuid import uuid4
+from werkzeug.utils import secure_filename
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product
 
 # initialise flask application
 app = Flask(__name__)
@@ -1713,7 +1716,7 @@ artists = [
 # define route function that will handle reququests
 def home():
     # sends a response back to the browser
-    return render_template("index.html", artists=artists)
+    return render_template("index.html", artists=load_artists())
 
 
 @app.route("/artists")
@@ -1725,8 +1728,9 @@ def artists_page():
 def artist_page(slug):
 
     # Find the artist matching the URL slug
-    for artist in artists:
+    for artist in load_artists():
         if artist["slug"] == slug:
+            artist["merch"] = [p for p in get_products() if p["artist_id"] == artist["id"]]
             return render_template("artist.html", artist=artist)
 
     return "Artist not found", 404
@@ -1735,11 +1739,12 @@ def artist_page(slug):
 # Initialise and seed the SQLite catalogue on first startup only.
 initialise_database()
 seed_products(artists)
+seed_artists(artists)
 
 
 def get_products():
     products = load_products()
-    artist_names = {artist["id"]: artist["name"] for artist in artists}
+    artist_names = {artist["id"]: artist["name"] for artist in load_artists()}
     for product in products:
         product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
     return products
@@ -2017,6 +2022,87 @@ def admin_edit_product(product_id):
             flash("Product updated successfully.")
             return redirect(url_for("admin_edit_product", product_id=product_id))
     return render_template("admin_edit_product.html", product=product)
+
+
+
+# Images are saved as files, not database blobs. Only image types are accepted.
+UPLOAD_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
+app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
+
+
+def store_image(upload, existing=""):
+    if not upload or not upload.filename:
+        return existing
+    extension = Path(secure_filename(upload.filename)).suffix.lower()
+    if extension not in UPLOAD_EXTENSIONS:
+        raise ValueError("Upload a JPG, PNG, WebP or GIF image.")
+    import imghdr
+    # imghdr checks the actual file signature, not just the extension.
+    header = upload.stream.read(64)
+    upload.stream.seek(0)
+    detected = imghdr.what(None, header)
+    if detected not in {"jpeg", "png", "webp", "gif"}:
+        raise ValueError("That file is not a recognised image.")
+    folder = Path(app.static_folder) / "images" / "uploads"
+    folder.mkdir(parents=True, exist_ok=True)
+    filename = uuid4().hex + extension
+    upload.save(folder / filename)
+    return "images/uploads/" + filename
+
+
+@app.route("/admin/artists")
+def admin_artists():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    return render_template("admin_artists.html", artists=load_artists())
+
+
+@app.route("/admin/artists/new", methods=["GET", "POST"])
+@app.route("/admin/artists/<int:artist_id>/edit", methods=["GET", "POST"])
+def admin_artist_form(artist_id=None):
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    artist = next((a for a in load_artists() if a["id"] == artist_id), None)
+    if artist_id is not None and artist is None:
+        abort(404)
+    if request.method == "POST":
+        if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+            abort(403)
+        try:
+            fields = {key: request.form.get(key, "") for key in
+                      ("name", "slug", "genre", "description", "biography")}
+            fields["image"] = store_image(request.files.get("image"), artist["image"] if artist else "")
+            fields["portrait"] = store_image(request.files.get("portrait"), artist["portrait"] if artist else "")
+            gallery = list(artist["gallery"]) if artist else []
+            gallery.extend(store_image(upload) for upload in request.files.getlist("gallery") if upload.filename)
+            fields["gallery"] = gallery
+            saved_id = save_artist(fields, artist_id)
+        except ValueError as exc:
+            flash(str(exc))
+        else:
+            flash("Artist saved.")
+            return redirect(url_for("admin_artist_form", artist_id=saved_id))
+    return render_template("admin_artist_form.html", artist=artist)
+
+
+@app.route("/admin/products/new", methods=["GET", "POST"])
+def admin_new_product():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    if request.method == "POST":
+        if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+            abort(403)
+        try:
+            fields = {key: request.form.get(key, "") for key in
+                      ("artist_id", "name", "category", "description", "price", "colour", "stock")}
+            fields["image"] = store_image(request.files.get("image"))
+            product_id = create_product(fields)
+        except ValueError as exc:
+            flash(str(exc))
+        else:
+            flash("Product created.")
+            return redirect(url_for("admin_edit_product", product_id=product_id))
+    return render_template("admin_new_product.html", artists=load_artists())
 
 
 # runs when everything before it is correct
