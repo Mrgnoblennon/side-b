@@ -15,13 +15,7 @@
         <label>Colour <input type="text" name="colour" value="{{ product.colour or '' }}" maxlength="100"></label>
         {% if product.variants %}
           <h2>Stock by Variant</h2>
-          <p class="admin-edit-note">Each option has its own stock quantity. Colour belongs to the product, not the variant.</p>
-          {% for variant in product.variants %}
-          <div class="admin-variant-grid">
-            <label for="variant-{{ loop.index }}">{{ [variant.size, variant.edition, variant.fit, variant.finish, variant.option]|select|join(' · ') or variant.id }}</label>
-            <input id="variant-{{ loop.index }}" type="number" name="stock_{{ variant.id }}" value="{{ variant.stock }}" min="0" step="1" required>
-          </div>
-          {% endfor %}
+          <p class="admin-edit-note">Save product details here. Edit each option's size, edition and stock in its own form below.</p>
           <input type="hidden" name="stock" value="{{ product.stock }}">
         {% else %}
           <label>Stock quantity <input type="number" name="stock" value="{{ product.stock }}" min="0" step="1" required></label>
@@ -33,6 +27,27 @@
         <button type="submit" class="product-add-cart">Save Changes</button>
       </form>
       <hr>
+      {% if product.variants %}
+      <h2>Edit existing options</h2>
+      <div class="admin-option-list">
+      {% for variant in product.variants %}
+        <form method="post" action="{{ url_for('admin_edit_variant', product_id=product.id, variant_id=variant.id) }}" class="checkout-form admin-option-form">
+          <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
+          <h3>Option {{ loop.index }}</h3>
+          <div class="admin-option-fields">
+            <label>Size <input name="size" maxlength="100" value="{{ variant.size or '' }}"></label>
+            <label>Edition <input name="edition" maxlength="100" value="{{ variant.edition or '' }}"></label>
+            <label>Fit <input name="fit" maxlength="100" value="{{ variant.fit or '' }}"></label>
+            <label>Finish <input name="finish" maxlength="100" value="{{ variant.finish or '' }}"></label>
+            <label>Other option <input name="option" maxlength="100" value="{{ variant.option or '' }}"></label>
+            <label>Stock <input type="number" name="stock" min="0" step="1" required value="{{ variant.stock }}"></label>
+          </div>
+          <button class="admin-action admin-action-edit" type="submit">Save Option {{ loop.index }}</button>
+        </form>
+      {% endfor %}
+      </div>
+      <hr>
+      {% endif %}
       <h2>Add a product option</h2>
       <p class="admin-edit-note">Enter a size, edition or another option. Each combination gets its own stock count. For example: size M, or edition Deluxe.</p>
       <form method="post" action="{{ url_for('admin_add_variant', product_id=product.id) }}" class="checkout-form">
