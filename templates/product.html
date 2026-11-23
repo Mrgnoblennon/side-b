@@ -71,9 +71,17 @@
                         <option value="">Select an option</option>
 
                         {% for variant in product.variants %}
-                        <option value="{{ variant.id }}">
-                          {{ variant.size or variant.edition or variant.fit or variant.option or variant.colour }}
-                         </option>
+                        <option value="{{ variant.id }}"
+                                data-stock="{{ variant.stock | default(0) }}"
+                                {% if variant.stock | default(0) | int <= 0 %}disabled{% endif %}>
+                            {% if variant.size %}{{ variant.size }}{% endif %}
+                            {% if variant.colour %} · {{ variant.colour }}{% endif %}
+                            {% if variant.edition %} · {{ variant.edition }}{% endif %}
+                            {% if variant.fit %} · {{ variant.fit }}{% endif %}
+                            {% if variant.finish %} · {{ variant.finish }}{% endif %}
+                            {% if variant.option %} · {{ variant.option }}{% endif %}
+                            {% if variant.stock | default(0) | int <= 0 %} (Out of stock){% endif %}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -91,12 +99,14 @@
                                name="quantity"
                                value="1"
                                min="1"
-                               max="99"
+                               max="{{ product.stock | default(0) }}"
                                readonly>
 
                         <button type="button" id="increaseQuantity">+</button>
                     </div>
                 </div>
+
+                <p id="stockMessage" class="product-cart-message" aria-live="polite"></p>
 
                 <!-- cart button -->
                 <button type="submit" class="product-add-cart">
@@ -167,6 +177,6 @@
 
 </main>
 
-<script src="{{ url_for('static', filename='js/product.js') }}"></script>
+<script src="{{ url_for('static', filename='js/product/product.js') }}"></script>
 
 {% endblock %}
