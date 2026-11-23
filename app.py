@@ -4,6 +4,8 @@ import os
 import hmac
 import secrets
 import re
+import smtplib
+from order_email import send_order_confirmation
 from pathlib import Path
 from uuid import uuid4
 from werkzeug.utils import secure_filename
@@ -251,7 +253,17 @@ def checkout():
             except ValueError as exc:
                 flash(str(exc))
                 return redirect(url_for("view_cart"))
+            # Save the order before sending; email failure must not undo checkout.
+            email_status = "not_configured"
+            try:
+                saved_order, saved_items = load_order(order_id)
+                if send_order_confirmation(saved_order, saved_items):
+                    email_status = "sent"
+            except (OSError, ValueError, smtplib.SMTPException) as exc:
+                app.logger.warning("Order %s confirmation email failed: %s", order_id, exc)
+                email_status = "failed"
             session.pop("cart", None)
+            session["order_email_status"] = email_status
             session["last_order_id"] = order_id
             return redirect(url_for("order_confirmation", order_id=order_id))
     return render_template("checkout.html", items=items, subtotal=subtotal)
@@ -264,7 +276,7 @@ def order_confirmation(order_id):
     order, items = load_order(order_id)
     if not order:
         abort(404)
-    return render_template("order_confirmation.html", order=order, items=items)
+    return render_template("order_confirmation.html", order=order, items=items, email_status=session.get("order_email_status", "not_configured"))
 
 
 
