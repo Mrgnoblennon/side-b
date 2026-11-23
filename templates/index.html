@@ -15,7 +15,8 @@
         <img
             src="{{ url_for('static', filename=hero_image_artist.image) }}"
             alt="{{ hero_image_artist.name }}"
-            onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';"
+            data-fallback="{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}"
+            onerror="this.onerror=null;this.src=this.dataset.fallback;"
         >
         {% endif %}
     </section>
