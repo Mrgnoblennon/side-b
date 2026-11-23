@@ -6,19 +6,20 @@
 <!-- the main event -->
 <main>
 
-    <!-- hero section -->
-    <section id="hero" class="home-feature-hero">
-        {% if hero_artist %}
-        <div class="home-feature-copy">
-            <span class="section-label">FEATURED ARTIST</span>
-            <h2>{{ hero_artist.name }}</h2>
-            <p>{{ hero_artist.genre }}</p>
-            <a class="home-feature-link" href="{{ url_for('artist_page', slug=hero_artist.slug) }}">Explore the Artist</a>
-        </div>
-        {% if hero_artist.image %}
+    <!-- original SIDE B. message, with a featured artist image -->
+    <section id="hero" class="home-editorial-hero">
+      <div class="home-editorial-copy">
+        <span class="section-label">SIDE B. / THE ARTIST ARCHIVE</span>
+        <h2>Discover the sound.</h2>
+        <p>Explore the artist.</p>
+        <a class="home-feature-link" href="{{ url_for('artists_page') }}">Explore Artists</a>
+      </div>
+      {% if hero_artist and hero_artist.image %}
+      <a class="home-editorial-image" href="{{ url_for('artist_page', slug=hero_artist.slug) }}" aria-label="Explore {{ hero_artist.name }}">
         <img src="{{ url_for('static', filename=hero_artist.image) }}" alt="{{ hero_artist.name }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/placeholders/artist-placeholder.png') }}';">
-        {% endif %}
-        {% else %}<h2>Discover the sound.</h2><p>Explore the artist.</p>{% endif %}
+        <span>Featured / {{ hero_artist.name }}</span>
+      </a>
+      {% endif %}
     </section>
 
     <!-- featured artists -->
