@@ -165,3 +165,25 @@ def load_products():
                 for row in db.execute("SELECT * FROM variants WHERE product_id = ? ORDER BY id", (product["id"],))
             ]
     return products
+
+
+def list_orders():
+    """Newest orders first, with a count of purchased items."""
+    with connect() as db:
+        return [dict(row) for row in db.execute("""
+            SELECT o.*, COALESCE(SUM(oi.quantity), 0) AS item_count
+            FROM orders AS o
+            LEFT JOIN order_items AS oi ON oi.order_id = o.id
+            GROUP BY o.id
+            ORDER BY o.id DESC
+        """)]
+
+
+def order_stats():
+    with connect() as db:
+        row = db.execute("""
+            SELECT COUNT(*) AS order_count,
+                   COALESCE(SUM(total_cents), 0) AS revenue_cents
+            FROM orders
+        """).fetchone()
+        return dict(row)
