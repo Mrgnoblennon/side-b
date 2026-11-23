@@ -6,7 +6,7 @@
     <div class="admin-top"><a href="{{ url_for('admin_products') }}" class="shop-filter">Back to Products</a><a href="{{ url_for('product_detail', product_id=product.id) }}" class="shop-filter">View in Shop</a></div>
     {% for message in get_flashed_messages() %}<p class="cart-notice" role="status">{{ message }}</p>{% endfor %}
     <section class="cart-summary" style="max-width:720px">
-      <form method="post" class="checkout-form">
+      <form method="post" enctype="multipart/form-data" class="checkout-form">
         <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
         <label>Product name <input type="text" name="name" value="{{ product.name }}" maxlength="200" required></label>
         <label>Price (AUD) <input type="number" name="price" value="{{ '%.2f'|format(product.price|float) }}" min="0" max="999999" step="0.01" required></label>
@@ -24,6 +24,10 @@
         {% else %}
           <label>Stock quantity <input type="number" name="stock" value="{{ product.stock }}" min="0" step="1" required></label>
         {% endif %}
+        <h2>Product image</h2>
+        {% if product.image %}<img src="{{ url_for('static', filename=product.image) }}" alt="Current product image" style="width:180px;max-height:180px;object-fit:contain">{% else %}<p>No image uploaded.</p>{% endif %}
+        <label>Replace image <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+        <label><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>
         <button type="submit" class="product-add-cart">Save Changes</button>
       </form>
     </section>
