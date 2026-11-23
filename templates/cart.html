@@ -42,7 +42,8 @@
         <aside class="cart-summary">
             <h2>Order Summary</h2>
             <p>Subtotal <strong>${{ "%.2f"|format(subtotal) }}</strong></p>
-            <p class="shop-card-artist">Checkout coming soon. No payment will be taken.</p>
+            <p class="shop-card-artist">Simulated checkout — no payment required.</p>
+            <a href="{{ url_for('checkout') }}" class="product-add-cart cart-checkout-link">Proceed to Checkout</a>
             <a href="{{ url_for('merch_shop') }}" class="shop-filter">Continue Shopping</a>
         </aside>
     </div>
