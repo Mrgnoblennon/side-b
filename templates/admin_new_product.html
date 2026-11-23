@@ -6,7 +6,7 @@
 <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
 <label>Artist <select name="artist_id" required>{% for artist in artists %}<option value="{{ artist.id }}">{{ artist.name }}</option>{% endfor %}</select></label>
 <label>Product name <input name="name" required maxlength="200"></label>
-<label>Category <input name="category" required placeholder="t-shirts, artwork, vinyl..."></label>
+<label>Category <input name="category" list="product-categories" required maxlength="100" placeholder="Choose or enter a new category"><datalist id="product-categories">{% for category in categories %}<option value="{{ category }}">{% endfor %}</datalist></label>
 <label>Description <textarea name="description" rows="4"></textarea></label>
 <label>Price (AUD) <input type="number" name="price" min="0" max="999999" step="0.01" required></label>
 <label>Colour <input name="colour"></label>
