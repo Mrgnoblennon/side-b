@@ -63,16 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateStock();
     });
 
-    form.addEventListener("submit", event => {
-        event.preventDefault();
-        if (!form.reportValidity()) return;
-        if (availableStock() < Number(quantityInput.value)) {
-            if (cartMessage) cartMessage.textContent = "Not enough stock available.";
-            return;
-        }
-        // The cart is being developed separately. Don't claim an item was added.
-        if (cartMessage) cartMessage.textContent = "Cart integration is not connected yet.";
-    });
+    // Allow the form to POST to Flask; browser validates required variant.
 
     updateStock();
 });

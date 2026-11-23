@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="shop-page">
+    <section class="shop-hero">
+        <p class="shop-eyebrow">SIDE-B COLLECTIONS</p>
+        <h1>Your Cart</h1>
+        <p>Review your items before checkout.</p>
+    </section>
+    {% for message in get_flashed_messages() %}
+    <p class="cart-notice" role="status">{{ message }}</p>
+    {% endfor %}
+    {% if items %}
+    <div class="cart-layout">
+        <section class="cart-items">
+            {% for item in items %}
+            <article class="cart-item">
+                <a href="{{ url_for('product_detail', product_id=item.product.id) }}">
+                    <img src="{{ url_for('static', filename=item.product.image) }}" alt="{{ item.product.name }}">
+                </a>
+                <div class="cart-item-info">
+                    <p class="shop-card-artist">{{ item.product.artist }}</p>
+                    <h2>{{ item.product.name }}</h2>
+                    <p>{{ item.variant_label }}</p>
+                    <p>${{ "%.2f"|format(item.product.price|float) }} each</p>
+                    <form action="{{ url_for('update_cart') }}" method="post" class="cart-update">
+                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                        <input type="hidden" name="variant_id" value="{{ item.variant_id }}">
+                        <label>Quantity <input type="number" name="quantity" min="1" max="{{ item.stock }}" value="{{ item.quantity }}" required></label>
+                        <button type="submit" class="shop-filter">Update</button>
+                    </form>
+                    <form action="{{ url_for('update_cart') }}" method="post">
+                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                        <input type="hidden" name="variant_id" value="{{ item.variant_id }}">
+                        <input type="hidden" name="quantity" value="0">
+                        <button type="submit" class="cart-remove">Remove</button>
+                    </form>
+                </div>
+                <strong>${{ "%.2f"|format(item.line_total) }}</strong>
+            </article>
+            {% endfor %}
+        </section>
+        <aside class="cart-summary">
+            <h2>Order Summary</h2>
+            <p>Subtotal <strong>${{ "%.2f"|format(subtotal) }}</strong></p>
+            <p class="shop-card-artist">Checkout coming soon. No payment will be taken.</p>
+            <a href="{{ url_for('merch_shop') }}" class="shop-filter">Continue Shopping</a>
+        </aside>
+    </div>
+    {% else %}
+    <div class="cart-empty">
+        <h2>Your cart is empty</h2>
+        <a href="{{ url_for('merch_shop') }}" class="shop-filter">Browse Merchandise</a>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}
