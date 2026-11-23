@@ -228,6 +228,7 @@ def update_product(product_id, fields, variant_stock):
     try:
         name = fields["name"].strip()
         colour = fields["colour"].strip()
+        image = fields.get("image", "").strip()
         price = Decimal(fields["price"])
         stock = int(fields["stock"])
         if not name or len(name) > 200 or len(colour) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
@@ -244,8 +245,8 @@ def update_product(product_id, fields, variant_stock):
         existing = {row["id"] for row in db.execute("SELECT id FROM variants WHERE product_id = ?", (product_id,))}
         if existing != set(parsed_variants):
             raise ValueError("Product options have changed. Refresh the page and try again.")
-        db.execute("UPDATE products SET name = ?, colour = ?, price = ?, stock = ? WHERE id = ?",
-                   (name, colour, float(price), stock, product_id))
+        db.execute("UPDATE products SET name = ?, colour = ?, price = ?, stock = ?, image = ? WHERE id = ?",
+                   (name, colour, float(price), stock, image, product_id))
         for variant_id, quantity in parsed_variants.items():
             db.execute("UPDATE variants SET stock = ? WHERE id = ? AND product_id = ?",
                        (quantity, variant_id, product_id))
@@ -281,6 +282,11 @@ def save_artist(fields, artist_id=None):
     slug = fields.get("slug", "").strip().lower()
     if not name or len(name) > 200 or not slug or len(slug) > 100 or not __import__("re").fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
         raise ValueError("Enter an artist name and a lowercase URL slug (letters, numbers and hyphens).")
+    fields = dict(fields)
+    fields["slug"] = slug
+    for key in ("genre", "description", "biography"):
+        if len(fields.get(key, "")) > 10000:
+            raise ValueError("Artist text is too long.")
     with connect() as db:
         try:
             if artist_id is None:
@@ -313,7 +319,7 @@ def create_product(fields):
         category = fields.get("category", "").strip()
         price = Decimal(fields.get("price", ""))
         stock = int(fields.get("stock", ""))
-        if not name or not category or len(name) > 200 or len(category) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
+        if not name or not category or len(name) > 200 or len(category) > 100 or len(fields.get("colour", "")) > 100 or len(fields.get("description", "")) > 10000 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
             raise ValueError
     except (ValueError, TypeError, InvalidOperation):
         raise ValueError("Enter a valid artist, name, category, price and non-negative stock.")
