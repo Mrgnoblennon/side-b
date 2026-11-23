@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, request, abort, session, redi
 import os
 import hmac
 import secrets
+import re
 from pathlib import Path
 from uuid import uuid4
 from werkzeug.utils import secure_filename
@@ -230,8 +231,20 @@ def checkout():
         return redirect(url_for("view_cart"))
     if request.method == "POST":
         customer = {key: request.form.get(key, "").strip() for key in ("name", "email", "phone", "suburb")}
-        if any(not value or len(value) > 200 for value in customer.values()) or "@" not in customer["email"]:
-            flash("Please enter valid contact details.")
+        # Validate on the server too: browser-side required/type checks can be bypassed.
+        errors = []
+        if not 2 <= len(customer["name"]) <= 100 or not re.fullmatch(r"[\w .,'’\-]+", customer["name"], re.UNICODE):
+            errors.append("Enter a valid full name (2–100 characters).")
+        if len(customer["email"]) > 254 or not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]{2,}", customer["email"]):
+            errors.append("Enter a valid email address.")
+        phone_digits = re.sub(r"\D", "", customer["phone"])
+        if not re.fullmatch(r"[+\d() .\-]+", customer["phone"]) or not 8 <= len(phone_digits) <= 15:
+            errors.append("Enter a valid phone number (8–15 digits).")
+        if not 2 <= len(customer["suburb"]) <= 100 or not re.fullmatch(r"[\w .,'’\-]+", customer["suburb"], re.UNICODE):
+            errors.append("Enter a valid suburb (2–100 characters).")
+        if errors:
+            for error in errors:
+                flash(error)
         else:
             try:
                 order_id = place_order(customer, session["cart"])
