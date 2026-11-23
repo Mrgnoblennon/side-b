@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="shop-page">
+  <section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>Admin Login</h1><p>Access order management.</p></section>
+  <section class="cart-summary" style="max-width:480px;margin:auto">
+    {% for message in get_flashed_messages() %}<p class="cart-notice" role="alert">{{ message }}</p>{% endfor %}
+    {% if not configured %}<p>Admin access is disabled. Set SIDE_B_ADMIN_PASSWORD before starting Flask.</p>{% endif %}
+    <form method="post" class="checkout-form">
+      <label>Password <input type="password" name="password" autocomplete="current-password" required></label>
+      <button type="submit" class="product-add-cart" {% if not configured %}disabled{% endif %}>Log In</button>
+    </form>
+  </section>
+</main>
+{% endblock %}
