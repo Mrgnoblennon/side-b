@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block content %}
+<main class="shop-page"><section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>{{ 'Edit Artist' if artist else 'Add Artist' }}</h1></section>
+<div class="admin-wrap"><div class="admin-top"><a class="shop-filter" href="{{ url_for('admin_artists') }}">Back to Artists</a></div>
+{% for message in get_flashed_messages() %}<p class="cart-notice">{{ message }}</p>{% endfor %}
+<section class="cart-summary" style="max-width:720px"><form method="post" enctype="multipart/form-data" class="checkout-form">
+<input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
+<label>Name <input name="name" required maxlength="200" value="{{ artist.name if artist else '' }}"></label>
+<label>URL slug <input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" value="{{ artist.slug if artist else '' }}" placeholder="artist-name"></label>
+<label>Genre <input name="genre" value="{{ artist.genre if artist else '' }}"></label>
+<label>Short description <textarea name="description" rows="3">{{ artist.description if artist else '' }}</textarea></label>
+<label>Biography <textarea name="biography" rows="6">{{ artist.biography if artist else '' }}</textarea></label>
+<label>Hero image <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+<label>Portrait <input type="file" name="portrait" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+<label>Gallery images (multiple allowed) <input type="file" name="gallery" multiple accept="image/jpeg,image/png,image/webp,image/gif"></label>
+{% if artist %}<p class="admin-edit-note">Existing images are retained unless replaced; new gallery images are appended.</p>{% endif %}
+<button type="submit" class="product-add-cart">Save Artist</button></form></section></div></main>{% endblock %}
