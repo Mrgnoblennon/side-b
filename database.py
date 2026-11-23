@@ -72,6 +72,24 @@ def initialise_database():
                 unit_price_cents INTEGER NOT NULL CHECK(unit_price_cents >= 0)
             );
         """)
+        for table in ("artists", "products"):
+            columns = {row["name"] for row in db.execute(f"PRAGMA table_info({table})")}
+            if "archived" not in columns:
+                db.execute(f"ALTER TABLE {table} ADD COLUMN archived INTEGER NOT NULL DEFAULT 0")
+
+
+def set_archived(kind, record_id, archived):
+    if kind not in ("artists", "products"):
+        raise ValueError("Invalid catalogue type.")
+    with connect() as db:
+        result = db.execute(f"UPDATE {kind} SET archived=? WHERE id=?", (int(bool(archived)), record_id))
+        if result.rowcount != 1:
+            raise LookupError("Catalogue entry not found.")
+
+
+def list_categories():
+    with connect() as db:
+        return [row[0] for row in db.execute("SELECT DISTINCT category FROM products WHERE TRIM(category) != '' ORDER BY category COLLATE NOCASE")]
 
 
 def place_order(customer, cart):
@@ -170,10 +188,10 @@ def seed_products(artists):
     return True
 
 
-def load_products():
+def load_products(include_archived=False):
     """Return dictionaries compatible with the existing Flask templates/cart."""
     with connect() as db:
-        products = [dict(row) for row in db.execute("SELECT * FROM products ORDER BY id")]
+        products = [dict(row) for row in db.execute("SELECT * FROM products ORDER BY id" if include_archived else "SELECT * FROM products WHERE archived=0 AND artist_id IN (SELECT id FROM artists WHERE archived=0) ORDER BY id")]
         for product in products:
             product["variants"] = [
                 {key: value for key, value in dict(row).items() if value is not None and key != "product_id"}
@@ -249,9 +267,9 @@ def seed_artists(catalogue):
                                [(artist["id"], path) for path in artist.get("gallery", [])])
 
 
-def load_artists():
+def load_artists(include_archived=False):
     with connect() as db:
-        artists = [dict(row) for row in db.execute("SELECT * FROM artists ORDER BY id")]
+        artists = [dict(row) for row in db.execute("SELECT * FROM artists ORDER BY id" if include_archived else "SELECT * FROM artists WHERE archived=0 ORDER BY id")]
         for artist in artists:
             artist["gallery"] = [row["image"] for row in db.execute(
                 "SELECT image FROM artist_gallery WHERE artist_id = ? ORDER BY id", (artist["id"],))]
