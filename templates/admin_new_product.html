@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block content %}
+<main class="shop-page"><section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>Add Product</h1></section>
+<div class="admin-wrap"><div class="admin-top"><a class="shop-filter" href="{{ url_for('admin_products') }}">Back to Products</a></div>
+{% for message in get_flashed_messages() %}<p class="cart-notice">{{ message }}</p>{% endfor %}
+<section class="cart-summary" style="max-width:720px"><form method="post" enctype="multipart/form-data" class="checkout-form">
+<input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
+<label>Artist <select name="artist_id" required>{% for artist in artists %}<option value="{{ artist.id }}">{{ artist.name }}</option>{% endfor %}</select></label>
+<label>Product name <input name="name" required maxlength="200"></label>
+<label>Category <input name="category" required placeholder="t-shirts, artwork, vinyl..."></label>
+<label>Description <textarea name="description" rows="4"></textarea></label>
+<label>Price (AUD) <input type="number" name="price" min="0" max="999999" step="0.01" required></label>
+<label>Colour <input name="colour"></label>
+<label>Stock <input type="number" name="stock" min="0" step="1" required></label>
+<label>Product image <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+<p class="admin-edit-note">New products start with a single stock quantity; size variants can be added in a later update.</p>
+<button type="submit" class="product-add-cart">Create Product</button></form></section></div></main>{% endblock %}
