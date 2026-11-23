@@ -257,13 +257,13 @@ def seed_artists(catalogue):
     initialise_database()
     with connect() as db:
         for artist in catalogue:
-            db.execute("""INSERT OR IGNORE INTO artists
+            inserted = db.execute("""INSERT OR IGNORE INTO artists
                 (id, name, slug, genre, description, biography, image, portrait)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
                 (artist["id"], artist["name"], artist["slug"], artist.get("genre", ""),
                  artist.get("description", ""), artist.get("biography", ""),
                  artist.get("image", ""), artist.get("portrait", "")))
-            if not db.execute("SELECT 1 FROM artist_gallery WHERE artist_id = ? LIMIT 1", (artist["id"],)).fetchone():
+            if inserted.rowcount == 1:
                 db.executemany("INSERT INTO artist_gallery (artist_id, image) VALUES (?, ?)",
                                [(artist["id"], path) for path in artist.get("gallery", [])])
 
