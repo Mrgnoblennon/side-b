@@ -10,6 +10,8 @@
         <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
         <label>Product name <input type="text" name="name" value="{{ product.name }}" maxlength="200" required></label>
         <label>Price (AUD) <input type="number" name="price" value="{{ '%.2f'|format(product.price|float) }}" min="0" max="999999" step="0.01" required></label>
+        <label>Category <input name="category" list="product-categories" value="{{ product.category }}" maxlength="100" required><datalist id="product-categories">{% for category in categories %}<option value="{{ category }}">{% endfor %}</datalist></label>
+        <label>Description <textarea name="description" rows="4" maxlength="10000">{{ product.description or '' }}</textarea></label>
         <label>Colour <input type="text" name="colour" value="{{ product.colour or '' }}" maxlength="100"></label>
         {% if product.variants %}
           <h2>Stock by Variant</h2>
@@ -27,7 +29,7 @@
         <h2>Product image</h2>
         {% if product.image %}<img src="{{ url_for('static', filename=product.image) }}" alt="Current product image" style="width:180px;max-height:180px;object-fit:contain">{% else %}<p>No image uploaded.</p>{% endif %}
         <label>Replace image <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
-        <label class="admin-check-row"><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>
+        {% if product.image %}<label class="admin-check-row"><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>{% endif %}
         <button type="submit" class="product-add-cart">Save Changes</button>
       </form>
       <hr>
