@@ -232,10 +232,12 @@ def update_product(product_id, fields, variant_stock):
     try:
         name = fields["name"].strip()
         colour = fields["colour"].strip()
+        category = fields["category"].strip()
+        description = fields["description"].strip()
         image = fields.get("image", "").strip()
         price = Decimal(fields["price"])
         stock = int(fields["stock"])
-        if not name or len(name) > 200 or len(colour) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
+        if not name or len(name) > 200 or not category or len(category) > 100 or len(description) > 10000 or len(colour) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
             raise ValueError
         parsed_variants = {str(key): int(value) for key, value in variant_stock.items()}
         if any(value < 0 for value in parsed_variants.values()):
@@ -249,8 +251,8 @@ def update_product(product_id, fields, variant_stock):
         existing = {row["id"] for row in db.execute("SELECT id FROM variants WHERE product_id = ?", (product_id,))}
         if existing != set(parsed_variants):
             raise ValueError("Product options have changed. Refresh the page and try again.")
-        db.execute("UPDATE products SET name = ?, colour = ?, price = ?, stock = ?, image = ? WHERE id = ?",
-                   (name, colour, float(price), stock, image, product_id))
+        db.execute("UPDATE products SET name = ?, category = ?, description = ?, colour = ?, price = ?, stock = ?, image = ? WHERE id = ?",
+                   (name, category, description, colour, float(price), stock, image, product_id))
         for variant_id, quantity in parsed_variants.items():
             db.execute("UPDATE variants SET stock = ? WHERE id = ? AND product_id = ?",
                        (quantity, variant_id, product_id))
