@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="shop-page">
+  <section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>Order Dashboard</h1><p>Simulated checkout orders saved in SQLite.</p></section>
+  <div class="admin-wrap">
+    <div class="admin-top"><h2>Overview</h2>
+      <form action="{{ url_for('admin_logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}"><button type="submit" class="admin-logout">Log Out</button></form>
+    </div>
+    <div class="admin-stat-grid">
+      <div class="cart-summary"><h3>Total Orders</h3><strong>{{ stats.order_count }}</strong></div>
+      <div class="cart-summary"><h3>Simulated Sales</h3><strong>${{ "%.2f"|format(stats.revenue_cents / 100) }}</strong></div>
+    </div>
+    <section class="cart-summary">
+      <h2>Recent Orders</h2>
+      {% if orders %}
+      <div class="admin-table-wrap"><table class="admin-table">
+        <thead><tr><th>Order</th><th>Placed (UTC)</th><th>Customer</th><th>Items</th><th>Total</th><th>Details</th></tr></thead>
+        <tbody>{% for order in orders %}
+          <tr><td>#{{ order.id }}</td><td>{{ order.created_at }}</td><td>{{ order.customer_name }}</td><td>{{ order.item_count }}</td><td>${{ "%.2f"|format(order.total_cents / 100) }}</td><td><a href="{{ url_for('admin_order_detail', order_id=order.id) }}">View</a></td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<p>No orders have been placed yet.</p>{% endif %}
+    </section>
+  </div>
+</main>
+{% endblock %}
