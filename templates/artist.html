@@ -2,18 +2,7 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ artist.name }} | SIDE B.</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="/static/js/script.js" defer></script>
-</head>
-
-<body>
-    <main class="artist-detail-page">
+<main class="artist-detail-page">
 
     <section class="artist-hero"
     style="--hero-image: url('{{ url_for('static', filename=artist.image) }}');"
@@ -124,10 +113,7 @@
                         <p>${{ "%.2f"|format(product.price) }}</p>
                     </div>
 
-                    <!-- button for future cart functionality -->
-                    <button type="button" class="merch-add-button" disabled>
-                        Coming Soon
-                    </button>
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="merch-add-button">View Product</a>
 
                 </div>
 
@@ -140,7 +126,5 @@
     </section>
 
   </main>
-</body>
-</html>
 
 {% endblock %}
