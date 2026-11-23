@@ -16,6 +16,21 @@ def connect():
 def initialise_database():
     with connect() as db:
         db.executescript("""
+            CREATE TABLE IF NOT EXISTS artists (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                slug TEXT NOT NULL UNIQUE,
+                genre TEXT NOT NULL DEFAULT '',
+                description TEXT NOT NULL DEFAULT '',
+                biography TEXT NOT NULL DEFAULT '',
+                image TEXT NOT NULL DEFAULT '',
+                portrait TEXT NOT NULL DEFAULT ''
+            );
+            CREATE TABLE IF NOT EXISTS artist_gallery (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                artist_id INTEGER NOT NULL REFERENCES artists(id),
+                image TEXT NOT NULL
+            );
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY,
                 artist_id INTEGER NOT NULL,
@@ -216,3 +231,80 @@ def update_product(product_id, fields, variant_stock):
         for variant_id, quantity in parsed_variants.items():
             db.execute("UPDATE variants SET stock = ? WHERE id = ? AND product_id = ?",
                        (quantity, variant_id, product_id))
+
+
+def seed_artists(catalogue):
+    """One-time, non-destructive migration of existing artist dictionaries."""
+    initialise_database()
+    with connect() as db:
+        for artist in catalogue:
+            db.execute("""INSERT OR IGNORE INTO artists
+                (id, name, slug, genre, description, biography, image, portrait)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (artist["id"], artist["name"], artist["slug"], artist.get("genre", ""),
+                 artist.get("description", ""), artist.get("biography", ""),
+                 artist.get("image", ""), artist.get("portrait", "")))
+            if not db.execute("SELECT 1 FROM artist_gallery WHERE artist_id = ? LIMIT 1", (artist["id"],)).fetchone():
+                db.executemany("INSERT INTO artist_gallery (artist_id, image) VALUES (?, ?)",
+                               [(artist["id"], path) for path in artist.get("gallery", [])])
+
+
+def load_artists():
+    with connect() as db:
+        artists = [dict(row) for row in db.execute("SELECT * FROM artists ORDER BY id")]
+        for artist in artists:
+            artist["gallery"] = [row["image"] for row in db.execute(
+                "SELECT image FROM artist_gallery WHERE artist_id = ? ORDER BY id", (artist["id"],))]
+    return artists
+
+
+def save_artist(fields, artist_id=None):
+    name = fields.get("name", "").strip()
+    slug = fields.get("slug", "").strip().lower()
+    if not name or len(name) > 200 or not slug or len(slug) > 100 or not __import__("re").fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+        raise ValueError("Enter an artist name and a lowercase URL slug (letters, numbers and hyphens).")
+    with connect() as db:
+        try:
+            if artist_id is None:
+                cursor = db.execute("""INSERT INTO artists
+                    (name, slug, genre, description, biography, image, portrait)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    tuple(fields.get(key, "").strip() for key in
+                          ("name", "slug", "genre", "description", "biography", "image", "portrait")))
+                artist_id = cursor.lastrowid
+            else:
+                if not db.execute("SELECT 1 FROM artists WHERE id = ?", (artist_id,)).fetchone():
+                    raise LookupError("Artist not found.")
+                db.execute("""UPDATE artists SET name=?, slug=?, genre=?, description=?,
+                    biography=?, image=?, portrait=? WHERE id=?""",
+                    tuple(fields.get(key, "").strip() for key in
+                          ("name", "slug", "genre", "description", "biography", "image", "portrait")) + (artist_id,))
+            db.execute("DELETE FROM artist_gallery WHERE artist_id = ?", (artist_id,))
+            db.executemany("INSERT INTO artist_gallery (artist_id, image) VALUES (?, ?)",
+                           [(artist_id, path) for path in fields.get("gallery", [])])
+        except sqlite3.IntegrityError:
+            raise ValueError("That artist URL slug is already in use.")
+    return artist_id
+
+
+def create_product(fields):
+    from decimal import Decimal, InvalidOperation
+    try:
+        artist_id = int(fields.get("artist_id", ""))
+        name = fields.get("name", "").strip()
+        category = fields.get("category", "").strip()
+        price = Decimal(fields.get("price", ""))
+        stock = int(fields.get("stock", ""))
+        if not name or not category or len(name) > 200 or len(category) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
+            raise ValueError
+    except (ValueError, TypeError, InvalidOperation):
+        raise ValueError("Enter a valid artist, name, category, price and non-negative stock.")
+    with connect() as db:
+        if not db.execute("SELECT 1 FROM artists WHERE id=?", (artist_id,)).fetchone():
+            raise ValueError("Select a valid artist.")
+        cursor = db.execute("""INSERT INTO products
+            (artist_id, name, category, description, price, colour, image, stock)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (artist_id, name, category, fields.get("description", "").strip(),
+             float(price), fields.get("colour", "").strip(), fields.get("image", ""), stock))
+        return cursor.lastrowid
