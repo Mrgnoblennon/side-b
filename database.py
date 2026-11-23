@@ -72,6 +72,12 @@ def initialise_database():
                 unit_price_cents INTEGER NOT NULL CHECK(unit_price_cents >= 0)
             );
         """)
+        db.execute("""CREATE TABLE IF NOT EXISTS categories (
+            name TEXT PRIMARY KEY COLLATE NOCASE,
+            archived INTEGER NOT NULL DEFAULT 0
+        )""")
+        db.execute("""INSERT OR IGNORE INTO categories(name)
+                      SELECT DISTINCT TRIM(category) FROM products WHERE TRIM(category) != ''""")
         artist_columns = {row["name"] for row in db.execute("PRAGMA table_info(artists)")}
         if "featured" not in artist_columns:
             db.execute("ALTER TABLE artists ADD COLUMN featured INTEGER NOT NULL DEFAULT 0")
@@ -91,9 +97,40 @@ def set_archived(kind, record_id, archived):
             raise LookupError("Catalogue entry not found.")
 
 
-def list_categories():
+def list_categories(include_archived=False):
     with connect() as db:
-        return [row[0] for row in db.execute("SELECT DISTINCT category FROM products WHERE TRIM(category) != '' ORDER BY category COLLATE NOCASE")]
+        db.execute("""INSERT OR IGNORE INTO categories(name)
+                      SELECT DISTINCT TRIM(category) FROM products WHERE TRIM(category) != ''""")
+        query = "SELECT name FROM categories" + ("" if include_archived else " WHERE archived=0") + " ORDER BY name COLLATE NOCASE"
+        return [row["name"] for row in db.execute(query)]
+
+
+def category_details():
+    with connect() as db:
+        db.execute("""INSERT OR IGNORE INTO categories(name)
+                      SELECT DISTINCT TRIM(category) FROM products WHERE TRIM(category) != ''""")
+        return [dict(row) for row in db.execute("""
+            SELECT c.name, c.archived, COUNT(p.id) AS product_count
+            FROM categories c LEFT JOIN products p ON p.category = c.name COLLATE NOCASE
+            GROUP BY c.name ORDER BY c.name COLLATE NOCASE
+        """)]
+
+
+def create_category(name):
+    name = name.strip()
+    if not name or len(name) > 100:
+        raise ValueError("Category name must be between 1 and 100 characters.")
+    with connect() as db:
+        if db.execute("SELECT 1 FROM categories WHERE name=?", (name,)).fetchone():
+            raise ValueError("That category already exists. Restore it if it is archived.")
+        db.execute("INSERT INTO categories(name) VALUES (?)", (name,))
+
+
+def archive_category(name, archived):
+    with connect() as db:
+        result = db.execute("UPDATE categories SET archived=? WHERE name=?", (int(bool(archived)), name))
+        if result.rowcount != 1:
+            raise LookupError("Category not found.")
 
 
 def place_order(customer, cart):
