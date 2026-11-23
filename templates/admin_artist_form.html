@@ -6,6 +6,7 @@
 <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
 <label>Name <input name="name" required maxlength="200" value="{{ artist.name if artist else '' }}"></label>
 <label>URL slug <input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" value="{{ artist.slug if artist else '' }}" placeholder="artist-name"></label>
+<label><input type="checkbox" name="featured" value="1" {% if artist and artist.featured %}checked{% endif %}> Feature this artist on the homepage</label>
 <label>Genre <input name="genre" value="{{ artist.genre if artist else '' }}"></label>
 <label>Short description <textarea name="description" rows="3">{{ artist.description if artist else '' }}</textarea></label>
 <label>Biography <textarea name="biography" rows="6">{{ artist.biography if artist else '' }}</textarea></label>
