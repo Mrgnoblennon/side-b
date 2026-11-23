@@ -27,7 +27,7 @@
         <h2>Product image</h2>
         {% if product.image %}<img src="{{ url_for('static', filename=product.image) }}" alt="Current product image" style="width:180px;max-height:180px;object-fit:contain">{% else %}<p>No image uploaded.</p>{% endif %}
         <label>Replace image <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
-        <label><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>
+        <label class="admin-check-row"><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>
         <button type="submit" class="product-add-cart">Save Changes</button>
       </form>
       <hr>
