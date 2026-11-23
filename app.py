@@ -352,7 +352,7 @@ def admin_edit_product(product_id):
     if request.method == "POST":
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
-        fields = {key: request.form.get(key, "") for key in ("name", "colour", "price", "stock")}
+        fields = {key: request.form.get(key, "") for key in ("name", "category", "description", "colour", "price", "stock")}
         variant_stock = {str(v["id"]): request.form.get("stock_" + str(v["id"]), "") for v in product["variants"]}
         try:
             fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (product.get("image") or ""))
@@ -362,7 +362,7 @@ def admin_edit_product(product_id):
         else:
             flash("Product updated successfully.")
             return redirect(url_for("admin_edit_product", product_id=product_id))
-    return render_template("admin_edit_product.html", product=product)
+    return render_template("admin_edit_product.html", product=product, categories=list_categories())
 
 
 
