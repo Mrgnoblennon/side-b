@@ -1,6 +1,7 @@
 # import flask class
 from flask import Flask, render_template, url_for, request, abort, session, redirect, flash
 import os
+from database import initialise_database, seed_products, load_products
 
 # initialise flask application
 app = Flask(__name__)
@@ -1655,25 +1656,17 @@ def artist_page(slug):
     return "Artist not found", 404
 
 
-# get all products from the artists dictionary
+# get all products from the# Initialise and seed the SQLite catalogue on first startup only.
+initialise_database()
+seed_products(artists)
 
-# get all merchandise from the artists dictionary
+
 def get_products():
-    products = []
-
-    # loop through each artist
-    for artist in artists:
-
-        # loop through the artist's merchandise
-        for product in artist["merch"]:
-
-            # copy the product without changing the original
-            item = product.copy()
-
-            # add the artist name
-            item["artist"] = artist["name"]
-
-            # add the product to the list
+    products = load_products()
+    artist_names = {artist["id"]: artist["name"] for artist in artists}
+    for product in products:
+        product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
+    return productsuct to the list
             products.append(item)
 
     return products
