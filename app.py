@@ -26,7 +26,7 @@ def home():
     featured = (featured + [a for a in catalogue if a not in featured])[:4]
     for artist in featured:
         artist["merch"] = [p for p in products if p["artist_id"] == artist["id"]]
-    return render_template("index.html", artists=featured, hero_artist=featured[0] if featured else None)
+    return render_template("index.html", artists=featured, hero_artist=secrets.choice(featured) if featured else None)
 
 
 @app.route("/artists")
