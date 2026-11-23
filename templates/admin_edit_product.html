@@ -30,6 +30,19 @@
         <label><input type="checkbox" name="remove_image" value="1"> Remove current image (unless replaced above)</label>
         <button type="submit" class="product-add-cart">Save Changes</button>
       </form>
+      <hr>
+      <h2>Add a product option</h2>
+      <p class="admin-edit-note">Enter a size, edition or another option. Each combination gets its own stock count. For example: size M, or edition Deluxe.</p>
+      <form method="post" action="{{ url_for('admin_add_variant', product_id=product.id) }}" class="checkout-form">
+        <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
+        <label>Size (optional) <input name="size" maxlength="100" placeholder="XS, S, M, L, XL, A4, A3"></label>
+        <label>Edition (optional) <input name="edition" maxlength="100" placeholder="Standard, Deluxe"></label>
+        <label>Fit (optional) <input name="fit" maxlength="100" placeholder="Regular, Oversized"></label>
+        <label>Finish (optional) <input name="finish" maxlength="100" placeholder="Matte, Gloss"></label>
+        <label>Other option (optional) <input name="option" maxlength="100"></label>
+        <label>Stock for this option <input name="stock" type="number" min="0" step="1" value="0" required></label>
+        <button type="submit" class="product-add-cart">Add Option</button>
+      </form>
     </section>
   </div>
 </main>
