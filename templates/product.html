@@ -58,6 +58,8 @@
                 {{ product.description | default('Officially inspired merchandise for music lovers.', true) }}
             </p>
 
+            {% if product.colour %}<p class="product-description"><strong>Colour:</strong> {{ product.colour }}</p>{% endif %}
+
             <!-- product options -->
             <form id="productForm" method="post" action="{{ url_for('add_to_cart') }}">
 
@@ -75,7 +77,6 @@
                                 data-stock="{{ variant.stock | default(0) }}"
                                 {% if variant.stock | default(0) | int <= 0 %}disabled{% endif %}>
                             {% if variant.size %}{{ variant.size }}{% endif %}
-                            {% if variant.colour %} · {{ variant.colour }}{% endif %}
                             {% if variant.edition %} · {{ variant.edition }}{% endif %}
                             {% if variant.fit %} · {{ variant.fit }}{% endif %}
                             {% if variant.finish %} · {{ variant.finish }}{% endif %}
