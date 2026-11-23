@@ -22,9 +22,11 @@ def home():
     # sends a response back to the browser
     catalogue = load_artists()
     products = get_products()
-    for artist in catalogue:
+    featured = [a for a in catalogue if a.get("featured")]
+    featured = (featured + [a for a in catalogue if a not in featured])[:4]
+    for artist in featured:
         artist["merch"] = [p for p in products if p["artist_id"] == artist["id"]]
-    return render_template("index.html", artists=catalogue)
+    return render_template("index.html", artists=featured, hero_artist=featured[0] if featured else None)
 
 
 @app.route("/artists")
@@ -42,6 +44,11 @@ def artist_page(slug):
             return render_template("artist.html", artist=artist)
 
     return "Artist not found", 404
+
+
+@app.context_processor
+def shared_navigation():
+    return {"cart_count": sum(max(0, int(item.get("quantity", 0))) for item in session.get("cart", []) if str(item.get("quantity", "")).isdigit())}
 
 
 # Initialise and seed the SQLite catalogue on first startup only.
@@ -399,6 +406,7 @@ def admin_artist_form(artist_id=None):
         try:
             fields = {key: request.form.get(key, "") for key in
                       ("name", "slug", "genre", "description", "biography")}
+            fields["featured"] = request.form.get("featured") == "1"
             fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (artist["image"] if artist else ""))
             fields["portrait"] = store_image(request.files.get("portrait"), "" if request.form.get("remove_portrait") == "1" else (artist["portrait"] if artist else ""))
             existing_gallery = list(artist["gallery"]) if artist else []
