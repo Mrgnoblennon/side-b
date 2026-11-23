@@ -11,7 +11,7 @@
         <h2>Discover the sound.</h2>
         <p>Explore the artist.</p>
         {% if artists %}
-        {% set hero_image_artist = artists[1] if artists|length > 1 else artists[0] %}
+        {% set hero_image_artist = hero_artist %}
         <img
             src="{{ url_for('static', filename=hero_image_artist.image) }}"
             alt="{{ hero_image_artist.name }}"
