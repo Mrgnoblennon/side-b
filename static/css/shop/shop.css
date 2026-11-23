@@ -498,3 +498,20 @@
 /* Centre merchandise cards at narrow and wide widths */
 .shop-grid {justify-content:center;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),300px))}
 @media(max-width:540px){.shop-grid{grid-template-columns:minmax(0,1fr);max-width:360px}.shop-page{padding-left:16px;padding-right:16px}}
+
+
+/* Admin controls: consistent actions and correctly aligned checkboxes */
+.admin-row-actions { display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:170px }
+.admin-action-form { display:inline-flex;margin:0 }
+.admin-table a.admin-action,.admin-action { display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 15px;border:1px solid var(--shop-border);border-radius:10px;background:#33313b;color:var(--shop-text);font:inherit;font-size:.9rem;font-weight:700;line-height:1.2;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s }
+.admin-table a.admin-action:hover,.admin-action:hover { background:#45414e;border-color:var(--shop-accent);text-decoration:none }
+.admin-action-archive { background:transparent;color:#e8c3cd;border-color:#72515c }
+.admin-action-archive:hover { background:#442b35 }
+.admin-action-restore { background:#293d35;border-color:#4b7864;color:#d6f3e5 }
+.admin-action-restore:hover { background:#345344 }
+.checkout-form textarea,.checkout-form select { width:100%;min-width:0;background:#24242b;color:var(--shop-text);border:1px solid var(--shop-border);border-radius:12px;padding:13px;font:inherit;line-height:1.5;resize:vertical }
+.checkout-form textarea:focus,.checkout-form input:focus,.checkout-form select:focus { outline:2px solid var(--shop-accent);outline-offset:1px }
+.checkout-form label.admin-check-row { display:flex;align-items:center;justify-content:flex-start;gap:12px;cursor:pointer;line-height:1.4;font-weight:600;padding:7px 0 }
+.checkout-form .admin-check-row input[type="checkbox"],.admin-gallery-remove input[type="checkbox"] { width:18px;height:18px;min-width:18px;flex:0 0 18px;margin:0;padding:0;accent-color:var(--shop-accent);cursor:pointer }
+.admin-gallery-remove { display:inline-flex;align-items:center;gap:7px;font-size:.9rem }
+@media(max-width:600px){.admin-row-actions{min-width:0}.admin-action{min-height:40px}}
