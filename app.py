@@ -1,6 +1,7 @@
 # import flask class
 from flask import Flask, render_template, url_for, request, abort, session, redirect, flash
 import os
+from database import initialise_database, seed_products, load_products, place_order, load_order
 
 # initialise flask application
 app = Flask(__name__)
@@ -1729,28 +1730,16 @@ def artist_page(slug):
     return "Artist not found", 404
 
 
-# get all products from the artists dictionary
+# Initialise and seed the SQLite catalogue on first startup only.
+initialise_database()
+seed_products(artists)
 
 
-# get all merchandise from the artists dictionary
 def get_products():
-    products = []
-
-    # loop through each artist
-    for artist in artists:
-
-        # loop through the artist's merchandise
-        for product in artist["merch"]:
-
-            # copy the product without changing the original
-            item = product.copy()
-
-            # add the artist name
-            item["artist"] = artist["name"]
-
-            # add the product to the list
-            products.append(item)
-
+    products = load_products()
+    artist_names = {artist["id"]: artist["name"] for artist in artists}
+    for product in products:
+        product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
     return products
 
 
@@ -1908,6 +1897,39 @@ def update_cart():
         return redirect(url_for("view_cart"))
     session["cart"] = cart
     return redirect(url_for("view_cart"))
+
+
+# Simulated checkout: no payment details are collected.
+@app.route("/checkout", methods=["GET", "POST"])
+def checkout():
+    items, subtotal = cart_details()
+    if not session.get("cart") or not items:
+        flash("Add something to your cart before checking out.")
+        return redirect(url_for("view_cart"))
+    if request.method == "POST":
+        customer = {key: request.form.get(key, "").strip() for key in ("name", "email", "phone", "suburb")}
+        if any(not value or len(value) > 200 for value in customer.values()) or "@" not in customer["email"]:
+            flash("Please enter valid contact details.")
+        else:
+            try:
+                order_id = place_order(customer, session["cart"])
+            except ValueError as exc:
+                flash(str(exc))
+                return redirect(url_for("view_cart"))
+            session.pop("cart", None)
+            session["last_order_id"] = order_id
+            return redirect(url_for("order_confirmation", order_id=order_id))
+    return render_template("checkout.html", items=items, subtotal=subtotal)
+
+
+@app.route("/order/<int:order_id>")
+def order_confirmation(order_id):
+    if session.get("last_order_id") != order_id:
+        abort(404)
+    order, items = load_order(order_id)
+    if not order:
+        abort(404)
+    return render_template("order_confirmation.html", order=order, items=items)
 
 
 # runs when everything before it is correct

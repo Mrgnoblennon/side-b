@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="shop-page">
+    <section class="shop-hero">
+        <p class="shop-eyebrow">SIDE-B COLLECTIONS</p>
+        <h1>Checkout</h1>
+        <p>Simulated checkout — no payment information required.</p>
+    </section>
+    {% for message in get_flashed_messages() %}<p class="cart-notice" role="alert">{{ message }}</p>{% endfor %}
+    <div class="cart-layout">
+        <section class="cart-summary">
+            <h2>Customer Details</h2>
+            <form class="checkout-form" action="{{ url_for('checkout') }}" method="post">
+                <label>Full name <input name="name" autocomplete="name" maxlength="200" required value="{{ request.form.get('name', '') }}"></label>
+                <label>Email <input type="email" name="email" autocomplete="email" maxlength="200" required value="{{ request.form.get('email', '') }}"></label>
+                <label>Phone <input type="tel" name="phone" autocomplete="tel" maxlength="200" required value="{{ request.form.get('phone', '') }}"></label>
+                <label>Suburb <input name="suburb" maxlength="200" required value="{{ request.form.get('suburb', '') }}"></label>
+                <button class="product-add-cart" type="submit">Place Simulated Order</button>
+            </form>
+        </section>
+        <aside class="cart-summary">
+            <h2>Order Summary</h2>
+            {% for item in items %}
+            <div class="checkout-summary-item">
+                <span>{{ item.product.name }}{% if item.variant_label %} ({{ item.variant_label }}){% endif %} × {{ item.quantity }}</span>
+                <strong>${{ "%.2f"|format(item.line_total) }}</strong>
+            </div>
+            {% endfor %}
+            <hr>
+            <p>Subtotal <strong>${{ "%.2f"|format(subtotal) }}</strong></p>
+            <a href="{{ url_for('view_cart') }}" class="shop-filter">Back to Cart</a>
+        </aside>
+    </div>
+</main>
+{% endblock %}
