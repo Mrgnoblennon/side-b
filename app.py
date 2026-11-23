@@ -2036,12 +2036,13 @@ def store_image(upload, existing=""):
     extension = Path(secure_filename(upload.filename)).suffix.lower()
     if extension not in UPLOAD_EXTENSIONS:
         raise ValueError("Upload a JPG, PNG, WebP or GIF image.")
-    import imghdr
-    # imghdr checks the actual file signature, not just the extension.
-    header = upload.stream.read(64)
+    header = upload.stream.read(32)
     upload.stream.seek(0)
-    detected = imghdr.what(None, header)
-    if detected not in {"jpeg", "png", "webp", "gif"}:
+    valid = (header.startswith(bytes.fromhex("ffd8ff")) and extension in {".jpg", ".jpeg"}) or (
+        header.startswith(bytes.fromhex("89504e470d0a1a0a")) and extension == ".png") or (
+        header.startswith((b"GIF87a", b"GIF89a")) and extension == ".gif") or (
+        header.startswith(b"RIFF") and header[8:12] == b"WEBP" and extension == ".webp")
+    if not valid:
         raise ValueError("That file is not a recognised image.")
     folder = Path(app.static_folder) / "images" / "uploads"
     folder.mkdir(parents=True, exist_ok=True)
