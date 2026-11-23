@@ -332,3 +332,32 @@ def create_product(fields):
             (artist_id, name, category, fields.get("description", "").strip(),
              float(price), fields.get("colour", "").strip(), fields.get("image", ""), stock))
         return cursor.lastrowid
+
+
+def add_product_variant(product_id, fields):
+    """Add a stock-tracked option; retain existing variants for order history."""
+    from uuid import uuid4
+    try:
+        stock = int(fields.get("stock", ""))
+        if stock < 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        raise ValueError("Variant stock must be a non-negative whole number.")
+    values = {key: fields.get(key, "").strip() for key in ("size", "edition", "fit", "finish", "option")}
+    if not any(values.values()):
+        raise ValueError("Enter at least one option, such as a size or edition.")
+    if any(len(value) > 100 for value in values.values()):
+        raise ValueError("Option values must be 100 characters or fewer.")
+    with connect() as db:
+        if not db.execute("SELECT 1 FROM products WHERE id=?", (product_id,)).fetchone():
+            raise LookupError("Product not found.")
+        existing = db.execute("SELECT size, edition, fit, finish, option FROM variants WHERE product_id=?", (product_id,)).fetchall()
+        if any(all((row[key] or "") == values[key] for key in values) for row in existing):
+            raise ValueError("This product option already exists.")
+        variant_id = uuid4().hex
+        db.execute("""INSERT INTO variants (id, product_id, size, edition, fit, finish, option, stock)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                   (variant_id, product_id, *(values[key] for key in values), stock))
+        if not existing:
+            db.execute("UPDATE products SET stock=0 WHERE id=?", (product_id,))
+    return variant_id
