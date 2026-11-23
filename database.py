@@ -106,7 +106,7 @@ def place_order(customer, cart):
                 quantity = int(entry["quantity"])
             except (ValueError, TypeError, KeyError):
                 raise ValueError("Invalid cart item.")
-            product = db.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
+            product = db.execute("SELECT * FROM products WHERE id = ? AND archived=0 AND artist_id IN (SELECT id FROM artists WHERE archived=0)", (product_id,)).fetchone()
             if not product or quantity < 1:
                 raise ValueError("An item in your cart is unavailable.")
             variant_id = entry.get("variant_id") or None
