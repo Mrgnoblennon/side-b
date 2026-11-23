@@ -4,6 +4,7 @@
   <section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>Manage Products</h1><p>Edit merchandise prices and stock levels.</p></section>
   <div class="admin-wrap">
     <div class="admin-top"><a href="{{ url_for('admin_orders') }}" class="shop-filter">Orders Dashboard</a><div class="admin-product-actions"><a href="{{ url_for('admin_new_product') }}" class="shop-filter">Add Product</a><a href="{{ url_for('admin_artists') }}" class="shop-filter">Manage Artists</a><span>{{ products|length }} products shown</span></div></div>
+    {% for message in get_flashed_messages() %}<p class="cart-notice">{{ message }}</p>{% endfor %}
     <section class="cart-summary">
       <form method="get" class="admin-search">
         <input type="search" name="q" value="{{ query }}" placeholder="Search product or artist" aria-label="Search products">
@@ -12,13 +13,13 @@
       </form>
       {% if products %}
       <div class="admin-table-wrap"><table class="admin-table">
-        <thead><tr><th>Product</th><th>Artist</th><th>Category</th><th>Price</th><th>Available</th><th>Action</th></tr></thead>
+        <thead><tr><th>Product</th><th>Artist</th><th>Category</th><th>Price</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>{% for product in products %}
           <tr>
             <td><div class="admin-product-row"><img class="admin-product-img" src="{{ url_for('static', filename=product.image) }}" alt="" onerror="this.onerror=null;this.src='/static/images/placeholders/product-placeholder.png';"><span>{{ product.name }}</span></div></td>
             <td>{{ product.artist }}</td><td>{{ product.category }}</td>
             <td>${{ "%.2f"|format(product.price|float) }}</td><td>{{ product.available_stock }}</td>
-            <td><a href="{{ url_for('admin_edit_product', product_id=product.id) }}">Edit</a></td>
+            <td>{{ "Archived" if product.archived else "Active" }}</td><td><a href="{{ url_for('admin_edit_product', product_id=product.id) }}">Edit</a> <form method="post" action="{{ url_for('admin_archive', kind='products', record_id=product.id) }}" style="display:inline" onsubmit="return confirm('Change this product archive status?')"><input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}"><input type="hidden" name="archived" value="{{ 0 if product.archived else 1 }}"><button type="submit">{{ "Restore" if product.archived else "Archive" }}</button></form></td>
           </tr>
         {% endfor %}</tbody>
       </table></div>
