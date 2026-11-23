@@ -187,3 +187,32 @@ def order_stats():
             FROM orders
         """).fetchone()
         return dict(row)
+
+
+def update_product(product_id, fields, variant_stock):
+    """Persist editable product fields and stock in a single transaction."""
+    from decimal import Decimal, InvalidOperation
+    try:
+        name = fields["name"].strip()
+        colour = fields["colour"].strip()
+        price = Decimal(fields["price"])
+        stock = int(fields["stock"])
+        if not name or len(name) > 200 or len(colour) > 100 or not price.is_finite() or price < 0 or price > 999999 or price.as_tuple().exponent < -2 or stock < 0:
+            raise ValueError
+        parsed_variants = {str(key): int(value) for key, value in variant_stock.items()}
+        if any(value < 0 for value in parsed_variants.values()):
+            raise ValueError
+    except (KeyError, ValueError, TypeError, InvalidOperation):
+        raise ValueError("Enter a valid name, price (up to two decimals), and non-negative stock quantities.")
+    with connect() as db:
+        product = db.execute("SELECT id FROM products WHERE id = ?", (product_id,)).fetchone()
+        if not product:
+            raise LookupError("Product not found.")
+        existing = {row["id"] for row in db.execute("SELECT id FROM variants WHERE product_id = ?", (product_id,))}
+        if existing != set(parsed_variants):
+            raise ValueError("Product options have changed. Refresh the page and try again.")
+        db.execute("UPDATE products SET name = ?, colour = ?, price = ?, stock = ? WHERE id = ?",
+                   (name, colour, float(price), stock, product_id))
+        for variant_id, quantity in parsed_variants.items():
+            db.execute("UPDATE variants SET stock = ? WHERE id = ? AND product_id = ?",
+                       (quantity, variant_id, product_id))
