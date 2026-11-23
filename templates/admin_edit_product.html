@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="shop-page">
+  <section class="shop-hero"><p class="shop-eyebrow">SIDE-B STAFF</p><h1>Edit Product</h1><p>{{ product.artist }} — {{ product.name }}</p></section>
+  <div class="admin-wrap">
+    <div class="admin-top"><a href="{{ url_for('admin_products') }}" class="shop-filter">Back to Products</a><a href="{{ url_for('product_detail', product_id=product.id) }}" class="shop-filter">View in Shop</a></div>
+    {% for message in get_flashed_messages() %}<p class="cart-notice" role="status">{{ message }}</p>{% endfor %}
+    <section class="cart-summary" style="max-width:720px">
+      <form method="post" class="checkout-form">
+        <input type="hidden" name="csrf_token" value="{{ session.admin_csrf }}">
+        <label>Product name <input type="text" name="name" value="{{ product.name }}" maxlength="200" required></label>
+        <label>Price (AUD) <input type="number" name="price" value="{{ '%.2f'|format(product.price|float) }}" min="0" max="999999" step="0.01" required></label>
+        <label>Colour <input type="text" name="colour" value="{{ product.colour or '' }}" maxlength="100"></label>
+        {% if product.variants %}
+          <h2>Stock by Variant</h2>
+          <p class="admin-edit-note">Each option has its own stock quantity. Colour belongs to the product, not the variant.</p>
+          {% for variant in product.variants %}
+          <div class="admin-variant-grid">
+            <label for="variant-{{ loop.index }}">{{ [variant.size, variant.edition, variant.fit, variant.finish, variant.option]|select|join(' · ') or variant.id }}</label>
+            <input id="variant-{{ loop.index }}" type="number" name="stock_{{ variant.id }}" value="{{ variant.stock }}" min="0" step="1" required>
+          </div>
+          {% endfor %}
+          <input type="hidden" name="stock" value="{{ product.stock }}">
+        {% else %}
+          <label>Stock quantity <input type="number" name="stock" value="{{ product.stock }}" min="0" step="1" required></label>
+        {% endif %}
+        <button type="submit" class="product-add-cart">Save Changes</button>
+      </form>
+    </section>
+  </div>
+</main>
+{% endblock %}
