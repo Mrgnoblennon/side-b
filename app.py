@@ -1682,27 +1682,34 @@ def get_products():
 @app.route("/shop")
 def merch_shop():
     products = get_products()
-
-    # get the selected category from the url
+    categories = sorted(set(p["category"] for p in products))
+    artist_names = sorted(set(p["artist"] for p in products))
     selected_category = request.args.get("category", "All")
+    selected_artist = request.args.get("artist", "All")
+    selected_sort = request.args.get("sort", "default")
 
-    # collect unique categories
-    categories = sorted(set(product["category"] for product in products))
+    if selected_category not in categories:
+        selected_category = "All"
+    if selected_artist not in artist_names:
+        selected_artist = "All"
+    if selected_sort not in ("default", "price_asc", "price_desc", "name_asc"):
+        selected_sort = "default"
 
-    # filter products by category
     if selected_category != "All":
-        products = [
-            product for product in products
-            if product["category"] == selected_category
-        ]
+        products = [p for p in products if p["category"] == selected_category]
+    if selected_artist != "All":
+        products = [p for p in products if p["artist"] == selected_artist]
 
-    return render_template(
-        "shop.html",
-        products=products,
-        categories=categories,
-        selected_category=selected_category
-    )
+    if selected_sort == "price_asc":
+        products.sort(key=lambda p: float(p["price"]))
+    elif selected_sort == "price_desc":
+        products.sort(key=lambda p: float(p["price"]), reverse=True)
+    elif selected_sort == "name_asc":
+        products.sort(key=lambda p: p["name"].casefold())
 
+    return render_template("shop.html", products=products, categories=categories,
+                           artist_names=artist_names, selected_category=selected_category,
+                           selected_artist=selected_artist, selected_sort=selected_sort)
 
 # individual product page
 @app.route("/shop/<int:product_id>")
