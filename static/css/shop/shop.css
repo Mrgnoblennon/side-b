@@ -464,3 +464,11 @@
 .cart-notice { max-width: 1200px; margin: 0 auto 20px; color: var(--shop-accent); }
 @media (max-width: 800px) { .cart-layout { grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .cart-item { grid-template-columns: 85px minmax(0,1fr); } .cart-item img { width: 85px; } .cart-item > strong { grid-column: 2; } }
+
+/* Simulated checkout */
+.cart-checkout-link { display: block; text-align: center; max-width: none; margin: 18px 0; }
+.checkout-form { display: grid; gap: 15px; }
+.checkout-form label { display: grid; gap: 6px; font-weight: 600; }
+.checkout-form input { background: #24242b; color: var(--shop-text); border: 1px solid var(--shop-border); border-radius: 12px; padding: 13px; width: 100%; }
+.checkout-form .product-add-cart { max-width: none; margin-top: 8px; }
+.checkout-summary-item { display: flex; justify-content: space-between; gap: 12px; margin: 12px 0; }
