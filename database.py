@@ -267,6 +267,8 @@ def seed_artists(catalogue):
                 (artist["id"], artist["name"], artist["slug"], artist.get("genre", ""),
                  artist.get("description", ""), artist.get("biography", ""),
                  artist.get("image", ""), artist.get("portrait", "")))
+            if inserted.rowcount == 1 and artist["id"] in [item["id"] for item in catalogue[:4]]:
+                db.execute("UPDATE artists SET featured=1 WHERE id=?", (artist["id"],))
             if inserted.rowcount == 1:
                 db.executemany("INSERT INTO artist_gallery (artist_id, image) VALUES (?, ?)",
                                [(artist["id"], path) for path in artist.get("gallery", [])])
