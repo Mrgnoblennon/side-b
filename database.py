@@ -372,3 +372,28 @@ def add_product_variant(product_id, fields):
         if not existing:
             db.execute("UPDATE products SET stock=0 WHERE id=?", (product_id,))
     return variant_id
+
+
+def edit_product_variant(product_id, variant_id, fields):
+    """Edit an existing option without changing its ID or historical order references."""
+    try:
+        stock = int(fields.get("stock", ""))
+        if stock < 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        raise ValueError("Variant stock must be a non-negative whole number.")
+    keys = ("size", "edition", "fit", "finish", "option")
+    values = {key: fields.get(key, "").strip() for key in keys}
+    if not any(values.values()):
+        raise ValueError("Enter at least one option, such as a size or edition.")
+    if any(len(value) > 100 for value in values.values()):
+        raise ValueError("Option values must be 100 characters or fewer.")
+    with connect() as db:
+        if not db.execute("SELECT 1 FROM variants WHERE id=? AND product_id=?", (variant_id, product_id)).fetchone():
+            raise LookupError("Product option not found.")
+        others = db.execute("SELECT size, edition, fit, finish, option FROM variants WHERE product_id=? AND id!=?", (product_id, variant_id)).fetchall()
+        if any(all((row[key] or "") == values[key] for key in keys) for row in others):
+            raise ValueError("This product option already exists.")
+        db.execute("""UPDATE variants SET size=?, edition=?, fit=?, finish=?, option=?, stock=?
+                      WHERE id=? AND product_id=?""",
+                   (*(values[key] for key in keys), stock, variant_id, product_id))
