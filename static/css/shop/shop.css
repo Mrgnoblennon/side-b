@@ -494,3 +494,7 @@
 .admin-search input { background: #24242b; color: var(--shop-text); border: 1px solid var(--shop-border); border-radius: 12px; padding: 12px; min-width: 220px; flex: 1; }
 .admin-variant-grid { display: grid; grid-template-columns: minmax(0,1fr) 120px; gap: 12px; align-items: center; }
 .admin-edit-note { color: var(--shop-muted); font-size: .9rem; }
+
+/* Centre merchandise cards at narrow and wide widths */
+.shop-grid {justify-content:center;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),300px))}
+@media(max-width:540px){.shop-grid{grid-template-columns:minmax(0,1fr);max-width:360px}.shop-page{padding-left:16px;padding-right:16px}}
