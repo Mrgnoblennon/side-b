@@ -1,7 +1,9 @@
 # import flask class
 from flask import Flask, render_template, url_for, request, abort, session, redirect, flash
 import os
-from database import initialise_database, seed_products, load_products, place_order, load_order
+import hmac
+import secrets
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats
 
 # initialise flask application
 app = Flask(__name__)
@@ -1855,6 +1857,55 @@ def order_confirmation(order_id):
     if not order:
         abort(404)
     return render_template("order_confirmation.html", order=order, items=items)
+
+
+
+# Admin access is disabled until SIDE_B_ADMIN_PASSWORD is configured.
+def admin_authenticated():
+    return bool(os.environ.get("SIDE_B_ADMIN_PASSWORD")) and session.get("admin_authenticated") is True
+
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if admin_authenticated():
+        return redirect(url_for("admin_orders"))
+    configured_password = os.environ.get("SIDE_B_ADMIN_PASSWORD", "")
+    if request.method == "POST":
+        supplied = request.form.get("password", "")
+        if configured_password and hmac.compare_digest(supplied, configured_password):
+            session.clear()
+            session["admin_authenticated"] = True
+            session["admin_csrf"] = secrets.token_urlsafe(32)
+            return redirect(url_for("admin_orders"))
+        flash("Incorrect password, or admin access has not been configured.")
+    return render_template("admin_login.html", configured=bool(configured_password))
+
+
+@app.route("/admin/logout", methods=["POST"])
+def admin_logout():
+    if not admin_authenticated():
+        abort(403)
+    if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+        abort(403)
+    session.clear()
+    return redirect(url_for("admin_login"))
+
+
+@app.route("/admin/orders")
+def admin_orders():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    return render_template("admin_orders.html", orders=list_orders(), stats=order_stats())
+
+
+@app.route("/admin/orders/<int:order_id>")
+def admin_order_detail(order_id):
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    order, items = load_order(order_id)
+    if not order:
+        abort(404)
+    return render_template("admin_order_detail.html", order=order, items=items)
 
 
 # runs when everything before it is correct
