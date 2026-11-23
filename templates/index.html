@@ -14,7 +14,7 @@
         <img
             src="{{ url_for('static', filename=artists[1].image) }}"
             alt="{{ artists[1].name }}"
-            onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';"
+            onerror="this.onerror=null; this.src='/static/images/placeholders/product-placeholder.png';"
         >
     </section>
 
@@ -30,9 +30,9 @@
             <a href="{{ url_for('artist_page', slug=artist.slug) }}" class="artist-link">
                 <div class="artist-card">
                     <img
-                        src="{{ url_for('static', filename=artist.portrait) }}"
-                        alt="{{ artist.name }}"
-                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='/images/placeholders/artist-placeholder.png') }}';"
+                    src="{{ url_for('static', filename=artist.portrait) }}"
+                    alt="{{ artist.name }}"
+                    onerror="this.onerror=null; this.src='/static/images/placeholders/artist-placeholder.png';"
                     >
     
                     <h3>{{ artist.name }}</h3>
@@ -63,7 +63,7 @@
                     <img
                         src="{{ url_for('static', filename=product.image) }}"
                         alt="{{ product.name }}"
-                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';"
+                        onerror="this.onerror=null; this.src='/static/images/placeholders/product-placeholder.png';"
                     >
 
                     <h3>{{ product.name }}</h3>
