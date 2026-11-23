@@ -72,6 +72,10 @@ def initialise_database():
                 unit_price_cents INTEGER NOT NULL CHECK(unit_price_cents >= 0)
             );
         """)
+        artist_columns = {row["name"] for row in db.execute("PRAGMA table_info(artists)")}
+        if "featured" not in artist_columns:
+            db.execute("ALTER TABLE artists ADD COLUMN featured INTEGER NOT NULL DEFAULT 0")
+            db.execute("UPDATE artists SET featured=1 WHERE id IN (SELECT id FROM artists ORDER BY id LIMIT 4)")
         for table in ("artists", "products"):
             columns = {row["name"] for row in db.execute(f"PRAGMA table_info({table})")}
             if "archived" not in columns:
@@ -287,22 +291,23 @@ def save_artist(fields, artist_id=None):
     for key in ("genre", "description", "biography"):
         if len(fields.get(key, "")) > 10000:
             raise ValueError("Artist text is too long.")
+    featured = 1 if fields.get("featured") else 0
     with connect() as db:
         try:
             if artist_id is None:
                 cursor = db.execute("""INSERT INTO artists
-                    (name, slug, genre, description, biography, image, portrait)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (name, slug, genre, description, biography, image, portrait, featured)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
                     tuple(fields.get(key, "").strip() for key in
-                          ("name", "slug", "genre", "description", "biography", "image", "portrait")))
+                          ("name", "slug", "genre", "description", "biography", "image", "portrait")) + (featured,))
                 artist_id = cursor.lastrowid
             else:
                 if not db.execute("SELECT 1 FROM artists WHERE id = ?", (artist_id,)).fetchone():
                     raise LookupError("Artist not found.")
                 db.execute("""UPDATE artists SET name=?, slug=?, genre=?, description=?,
-                    biography=?, image=?, portrait=? WHERE id=?""",
+                    biography=?, image=?, portrait=?, featured=? WHERE id=?""",
                     tuple(fields.get(key, "").strip() for key in
-                          ("name", "slug", "genre", "description", "biography", "image", "portrait")) + (artist_id,))
+                          ("name", "slug", "genre", "description", "biography", "image", "portrait")) + (featured, artist_id))
             db.execute("DELETE FROM artist_gallery WHERE artist_id = ?", (artist_id,))
             db.executemany("INSERT INTO artist_gallery (artist_id, image) VALUES (?, ?)",
                            [(artist_id, path) for path in fields.get("gallery", [])])
