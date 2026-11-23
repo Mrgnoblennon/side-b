@@ -6,7 +6,7 @@ import secrets
 from pathlib import Path
 from uuid import uuid4
 from werkzeug.utils import secure_filename
-from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product, set_archived, list_categories
 
 # initialise flask application
 app = Flask(__name__)
@@ -50,9 +50,9 @@ seed_products(sample_artists)
 seed_artists(sample_artists)
 
 
-def get_products():
-    products = load_products()
-    artist_names = {artist["id"]: artist["name"] for artist in load_artists()}
+def get_products(include_archived=False):
+    products = load_products(include_archived=include_archived)
+    artist_names = {artist["id"]: artist["name"] for artist in load_artists(include_archived=True)}
     for product in products:
         product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
     return products
@@ -301,7 +301,7 @@ def admin_order_detail(order_id):
 def admin_products():
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    products = get_products()
+    products = get_products(include_archived=True)
     for product in products:
         product["available_stock"] = sum(int(v["stock"]) for v in product["variants"]) if product["variants"] else int(product["stock"])
     query = request.args.get("q", "").strip()
@@ -314,7 +314,7 @@ def admin_products():
 def admin_edit_product(product_id):
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    product = next((p for p in get_products() if p["id"] == product_id), None)
+    product = next((p for p in get_products(include_archived=True) if p["id"] == product_id), None)
     if product is None:
         abort(404)
     if request.method == "POST":
@@ -363,7 +363,7 @@ def store_image(upload, existing=""):
 def admin_artists():
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    return render_template("admin_artists.html", artists=load_artists())
+    return render_template("admin_artists.html", artists=load_artists(include_archived=True))
 
 
 @app.route("/admin/artists/new", methods=["GET", "POST"])
@@ -371,7 +371,7 @@ def admin_artists():
 def admin_artist_form(artist_id=None):
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    artist = next((a for a in load_artists() if a["id"] == artist_id), None)
+    artist = next((a for a in load_artists(include_archived=True) if a["id"] == artist_id), None)
     if artist_id is not None and artist is None:
         abort(404)
     if request.method == "POST":
@@ -390,7 +390,7 @@ def admin_artist_form(artist_id=None):
             flash(str(exc))
         else:
             flash("Artist saved.")
-            return redirect(url_for("admin_artist_form", artist_id=saved_id))
+            return redirect(url_for("admin_artists"))
     return render_template("admin_artist_form.html", artist=artist)
 
 
@@ -410,8 +410,24 @@ def admin_new_product():
             flash(str(exc))
         else:
             flash("Product created.")
-            return redirect(url_for("admin_edit_product", product_id=product_id))
-    return render_template("admin_new_product.html", artists=load_artists())
+            return redirect(url_for("admin_products"))
+    return render_template("admin_new_product.html", artists=load_artists(), categories=list_categories())
+
+
+@app.route("/admin/<kind>/<int:record_id>/archive", methods=["POST"])
+def admin_archive(kind, record_id):
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    if kind not in ("artists", "products"):
+        abort(404)
+    if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+        abort(403)
+    try:
+        set_archived(kind, record_id, request.form.get("archived") == "1")
+    except LookupError:
+        abort(404)
+    flash(("Archived" if request.form.get("archived") == "1" else "Restored") + " successfully.")
+    return redirect(url_for("admin_artists" if kind == "artists" else "admin_products"))
 
 
 # runs when everything before it is correct
