@@ -9,7 +9,7 @@ from order_email import send_order_confirmation
 from pathlib import Path
 from uuid import uuid4
 from werkzeug.utils import secure_filename
-from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product, set_archived, list_categories, add_product_variant, edit_product_variant
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product, set_archived, list_categories, category_details, create_category, archive_category, add_product_variant, edit_product_variant
 
 # initialise flask application
 app = Flask(__name__)
@@ -72,7 +72,7 @@ def get_products(include_archived=False):
 @app.route("/shop")
 def merch_shop():
     products = get_products()
-    categories = sorted(set(p["category"] for p in products))
+    categories = [c for c in list_categories() if any(p["category"].casefold() == c.casefold() for p in products)]
     artist_names = sorted(set(p["artist"] for p in products))
     selected_category = request.args.get("category", "All")
     selected_artist = request.args.get("artist", "All")
@@ -327,6 +327,37 @@ def admin_order_detail(order_id):
         abort(404)
     return render_template("admin_order_detail.html", order=order, items=items)
 
+
+
+@app.route("/admin/categories", methods=["GET", "POST"])
+def admin_categories():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    if request.method == "POST":
+        if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+            abort(403)
+        try:
+            create_category(request.form.get("name", ""))
+        except ValueError as exc:
+            flash(str(exc))
+        else:
+            flash("Category created.")
+        return redirect(url_for("admin_categories"))
+    return render_template("admin_categories.html", categories=category_details())
+
+
+@app.route("/admin/categories/archive", methods=["POST"])
+def admin_category_archive():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+        abort(403)
+    try:
+        archive_category(request.form.get("name", ""), request.form.get("archived") == "1")
+    except LookupError:
+        abort(404)
+    flash("Category status updated.")
+    return redirect(url_for("admin_categories"))
 
 
 @app.route("/admin/products")
