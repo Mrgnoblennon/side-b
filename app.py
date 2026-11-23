@@ -9,7 +9,7 @@ from order_email import send_order_confirmation
 from pathlib import Path
 from uuid import uuid4
 from werkzeug.utils import secure_filename
-from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product, set_archived, list_categories, add_product_variant
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product, seed_artists, load_artists, save_artist, create_product, set_archived, list_categories, add_product_variant, edit_product_variant
 
 # initialise flask application
 app = Flask(__name__)
@@ -381,6 +381,24 @@ def admin_add_variant(product_id):
         abort(404)
     else:
         flash("Product option added successfully.")
+    return redirect(url_for("admin_edit_product", product_id=product_id))
+
+
+@app.route("/admin/products/<int:product_id>/variants/<variant_id>/edit", methods=["POST"])
+def admin_edit_variant(product_id, variant_id):
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+        abort(403)
+    try:
+        edit_product_variant(product_id, variant_id, {key: request.form.get(key, "") for key in
+                             ("size", "edition", "fit", "finish", "option", "stock")})
+    except ValueError as exc:
+        flash(str(exc))
+    except LookupError:
+        abort(404)
+    else:
+        flash("Product option updated successfully.")
     return redirect(url_for("admin_edit_product", product_id=product_id))
 
 
