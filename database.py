@@ -286,10 +286,12 @@ def load_artists(include_archived=False):
 def save_artist(fields, artist_id=None):
     name = fields.get("name", "").strip()
     slug = fields.get("slug", "").strip().lower()
-    if not name or len(name) > 200 or not slug or len(slug) > 100 or not __import__("re").fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+    if len(name) < 2 or len(name) > 200 or not slug or len(slug) > 100 or not __import__("re").fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
         raise ValueError("Enter an artist name and a lowercase URL slug (letters, numbers and hyphens).")
     fields = dict(fields)
     fields["slug"] = slug
+    if len(fields.get("genre", "").strip()) > 100:
+        raise ValueError("Artist genre must be 100 characters or fewer.")
     for key in ("genre", "description", "biography"):
         if len(fields.get(key, "")) > 10000:
             raise ValueError("Artist text is too long.")
