@@ -10,15 +10,12 @@
     <section id="hero">
         <h2>Discover the sound.</h2>
         <p>Explore the artist.</p>
-        {% if artists %}
-        {% set hero_image_artist = hero_artist %}
-        <img
-            src="{{ url_for('static', filename=hero_image_artist.image) }}"
-            alt="{{ hero_image_artist.name }}"
-            data-fallback="{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}"
-            onerror="this.onerror=null;this.src=this.dataset.fallback;"
-        >
-        {% endif %}
+        <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+               aria-label="SIDE B artist montage"
+               {% if hero_artist %}poster="{{ url_for('static', filename=hero_artist.image) }}"{% endif %}>
+            <source src="{{ url_for('static', filename='videos/hero.mp4') }}" type="video/mp4">
+            Your browser does not support background video.
+        </video>
     </section>
 
     <!-- featured artists -->
