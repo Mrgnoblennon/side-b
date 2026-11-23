@@ -605,3 +605,21 @@ footer {
   color: #ffffff;
 }
 
+
+/* Consistent centred artist photography */
+.artist-card img,
+.gallery-image {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* Hero uses a CSS variable so the gradient remains visible. */
+.artist-hero {
+  background-position: center center;
+  background-size: cover;
+}
+
+/* Homepage featured artist images */
+#hero img {
+  object-position: center center;
+}
