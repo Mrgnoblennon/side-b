@@ -7,15 +7,18 @@
 <main>
 
     <!-- hero section -->
-    <section id="hero">
-        <h2>Discover the sound.</h2>
-        <p>Explore the artist.</p>
-
-        <img
-            src="{{ url_for('static', filename=artists[1].image) }}"
-            alt="{{ artists[1].name }}"
-            onerror="this.onerror=null; this.src='/static/images/placeholders/product-placeholder.png';"
-        >
+    <section id="hero" class="home-feature-hero">
+        {% if hero_artist %}
+        <div class="home-feature-copy">
+            <span class="section-label">FEATURED ARTIST</span>
+            <h2>{{ hero_artist.name }}</h2>
+            <p>{{ hero_artist.genre }}</p>
+            <a class="home-feature-link" href="{{ url_for('artist_page', slug=hero_artist.slug) }}">Explore the Artist</a>
+        </div>
+        {% if hero_artist.image %}
+        <img src="{{ url_for('static', filename=hero_artist.image) }}" alt="{{ hero_artist.name }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/placeholders/artist-placeholder.png') }}';">
+        {% endif %}
+        {% else %}<h2>Discover the sound.</h2><p>Explore the artist.</p>{% endif %}
     </section>
 
     <!-- featured artists -->
@@ -25,7 +28,7 @@
         <div class="artist-grid">
 
             <!-- show first 4 artists -->
-            {% for artist in artists[:4] %}
+            {% for artist in artists %}
 
             <a href="{{ url_for('artist_page', slug=artist.slug) }}" class="artist-link">
                 <div class="artist-card">
