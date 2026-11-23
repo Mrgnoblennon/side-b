@@ -653,3 +653,19 @@ header nav {align-items:center;flex-wrap:wrap}
 .merch-card-info p {margin:0}
 .merch-card .merch-add-button {display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;width:auto;max-width:calc(100% - 40px);margin:12px 20px 22px;padding:12px 18px;text-decoration:none;line-height:1.25;border-radius:9px;box-sizing:border-box}
 .merch-card .merch-add-button:hover {filter:brightness(1.08)}
+
+/* Homepage featured collections: same card and arrow behavior as artist pages */
+#featured-collections {padding:30px 0 70px}
+.collections-title {margin:0 6% 16px;font-size:clamp(2rem,3.5vw,2.8rem)}
+.home-artist-collection {padding:42px 6% 48px}
+.home-artist-collection:nth-of-type(even) {background:var(--background)}
+.home-artist-collection .merch-heading {margin:0 0 26px}
+.home-artist-collection .merch-heading h2 {margin:12px 0 0;font-size:clamp(1.5rem,3vw,2.4rem)}
+.home-artist-collection .merch-carousel {padding-bottom:8px}
+.home-artist-collection .merch-card {flex:0 0 calc((100% - 40px)/3)}
+.collection-artist-link {display:inline-block;margin-top:20px;color:var(--accent);font-weight:600;text-decoration:none}
+.collection-artist-link:hover {text-decoration:underline}
+.collection-empty {color:#b9b4c0}
+.collection-shop-footer {padding:0 6%}
+@media(max-width:900px){.home-artist-collection .merch-card{flex-basis:calc((100% - 20px)/2)}}
+@media(max-width:600px){.home-artist-collection .merch-card{flex-basis:85%}.home-artist-collection .merch-heading{align-items:center}.home-artist-collection .merch-controls{flex-shrink:0}.home-artist-collection .merch-heading h2{font-size:1.4rem}}
