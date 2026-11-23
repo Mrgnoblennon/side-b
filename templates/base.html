@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <title>Side-B</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- existing website styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- merch shop styling -->
@@ -17,7 +19,7 @@
             <!-- placeholders -->
             <a href="/artists">Artists</a>
             <a href="/shop">Merchandise</a>
-            <a href="{{ url_for('view_cart') }}">Cart</a>
+            <a href="{{ url_for('view_cart') }}" class="cart-nav" aria-label="Shopping cart, {{ cart_count }} items"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.4 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>{% if cart_count %}<span class="cart-nav-count">{{ cart_count }}</span>{% endif %}</a>
             {% if session.get("admin_authenticated") %}<a href="{{ url_for('admin_orders') }}">Admin</a>{% endif %}
         </nav>
     </header>
@@ -25,6 +27,10 @@
     <!-- content changes depending on the page -->
     {% block content %}
     {% endblock %}
-
+    <footer class="site-footer">
+      <div><strong>SIDE B.</strong><p>Discover the artist. Explore the collection.</p></div>
+      <div class="site-footer-links"><a href="{{ url_for('home') }}">Home</a><a href="{{ url_for('artists_page') }}">Artists</a><a href="{{ url_for('merch_shop') }}">Merchandise</a><a href="{{ url_for('admin_orders') if session.get('admin_authenticated') else url_for('admin_login') }}">Admin {{ 'Dashboard' if session.get('admin_authenticated') else 'Login' }}</a></div>
+      <small>© SIDE B. · Student project · Simulated checkout</small>
+    </footer>
 </body>
 </html>
