@@ -1656,7 +1656,7 @@ def artist_page(slug):
     return "Artist not found", 404
 
 
-# get all products from the# Initialise and seed the SQLite catalogue on first startup only.
+# Initialise and seed the SQLite catalogue on first startup only.
 initialise_database()
 seed_products(artists)
 
@@ -1666,11 +1666,7 @@ def get_products():
     artist_names = {artist["id"]: artist["name"] for artist in artists}
     for product in products:
         product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
-    return productsuct to the list
-            products.append(item)
-
     return products
-
 
 
 # merch shop page
