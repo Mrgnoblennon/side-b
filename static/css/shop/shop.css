@@ -82,10 +82,11 @@
 /* product cards */
 .shop-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 300px));
     gap: 24px;
     max-width: 1350px;
     margin: 0 auto;
+    justify-content: start;
 }
 
 .shop-card {
