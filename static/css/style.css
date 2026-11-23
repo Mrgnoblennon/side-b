@@ -653,3 +653,19 @@ header nav {align-items:center;flex-wrap:wrap}
 .merch-card-info p {margin:0}
 .merch-card .merch-add-button {display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;width:auto;max-width:calc(100% - 40px);margin:12px 20px 22px;padding:12px 18px;text-decoration:none;line-height:1.25;border-radius:9px;box-sizing:border-box}
 .merch-card .merch-add-button:hover {filter:brightness(1.08)}
+
+/* Homepage video hero: square corners, responsive cinematic crop */
+#hero .hero-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 70vh;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  background: #151419;
+}
+#hero img { border-radius: 0; }
+@media (max-width: 600px) {
+  #hero .hero-video { aspect-ratio: 4 / 5; max-height: 65vh; }
+}
