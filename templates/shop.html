@@ -13,18 +13,40 @@
 
     <!-- category filters -->
     <section class="shop-filters">
-        <a href="{{ url_for('merch_shop') }}"
+        <a href="{{ url_for('merch_shop', artist=selected_artist, sort=selected_sort) }}"
            class="shop-filter {% if selected_category == 'All' %}active{% endif %}">
             All
         </a>
 
         {% for category in categories %}
-        <a href="{{ url_for('merch_shop', category=category) }}"
+        <a href="{{ url_for('merch_shop', category=category, artist=selected_artist, sort=selected_sort) }}"
            class="shop-filter {% if selected_category == category %}active{% endif %}">
             {{ category | replace('_', ' ') | title }}
         </a>
         {% endfor %}
     </section>
+
+    <!-- artist filter and sort -->
+    <form class="shop-browse-controls" action="{{ url_for('merch_shop') }}" method="get">
+        <input type="hidden" name="category" value="{{ selected_category }}">
+        <label for="shopArtist">Artist</label>
+        <select id="shopArtist" name="artist">
+            <option value="All">All Artists</option>
+            {% for artist_name in artist_names %}
+            <option value="{{ artist_name }}" {% if selected_artist == artist_name %}selected{% endif %}>{{ artist_name }}</option>
+            {% endfor %}
+        </select>
+        <label for="shopSort">Sort by</label>
+        <select id="shopSort" name="sort">
+            <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Featured</option>
+            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+        </select>
+        <button type="submit" class="shop-filter">Apply</button>
+        <a href="{{ url_for('merch_shop') }}" class="shop-filter">Reset</a>
+    </form>
+    <p class="shop-results-count">{{ products | length }} products found</p>
 
     <!-- product grid -->
     <section class="shop-grid">
@@ -65,7 +87,7 @@
         </article>
 
         {% else %}
-        <p class="shop-empty">No products found in this category.</p>
+        <p class="shop-empty">No products match these filters. Try resetting your selection.</p>
         {% endfor %}
 
     </section>

@@ -1,9 +1,11 @@
 # import flask class
-from flask import Flask, render_template, url_for, request, abort
+from flask import Flask, render_template, url_for, request, abort, session, redirect, flash
 import os
 
 # initialise flask application
 app = Flask(__name__)
+# Set SIDE_B_SECRET_KEY in production to keep carts valid across restarts.
+app.secret_key = os.environ.get('SIDE_B_SECRET_KEY', 'side-b-local-development-only')
 
 
 # SIDE B. sample artist catalogue (AUD). Replace sample prices and stock as needed.
@@ -1756,26 +1758,34 @@ def get_products():
 @app.route("/shop")
 def merch_shop():
     products = get_products()
-
-    # get the selected category from the url
+    categories = sorted(set(p["category"] for p in products))
+    artist_names = sorted(set(p["artist"] for p in products))
     selected_category = request.args.get("category", "All")
+    selected_artist = request.args.get("artist", "All")
+    selected_sort = request.args.get("sort", "default")
 
-    # collect unique categories
-    categories = sorted(set(product["category"] for product in products))
+    if selected_category not in categories:
+        selected_category = "All"
+    if selected_artist not in artist_names:
+        selected_artist = "All"
+    if selected_sort not in ("default", "price_asc", "price_desc", "name_asc"):
+        selected_sort = "default"
 
-    # filter products by category
     if selected_category != "All":
-        products = [
-            product for product in products if product["category"] == selected_category
-        ]
+        products = [p for p in products if p["category"] == selected_category]
+    if selected_artist != "All":
+        products = [p for p in products if p["artist"] == selected_artist]
 
-    return render_template(
-        "shop.html",
-        products=products,
-        categories=categories,
-        selected_category=selected_category,
-    )
+    if selected_sort == "price_asc":
+        products.sort(key=lambda p: float(p["price"]))
+    elif selected_sort == "price_desc":
+        products.sort(key=lambda p: float(p["price"]), reverse=True)
+    elif selected_sort == "name_asc":
+        products.sort(key=lambda p: p["name"].casefold())
 
+    return render_template("shop.html", products=products, categories=categories,
+                           artist_names=artist_names, selected_category=selected_category,
+                           selected_artist=selected_artist, selected_sort=selected_sort)
 
 # individual product page
 @app.route("/shop/<int:product_id>")
@@ -1802,8 +1812,102 @@ def product_detail(product_id):
     ][:4]
 
     return render_template(
-        "product.html", product=product, related_products=related_products
+        "product.html",
+        product=product,
+        related_products=related_products
     )
+
+
+# Cart stores only IDs and quantities; product details come from the catalogue.
+def cart_details():
+    catalogue = {str(p["id"]): p for p in get_products()}
+    items = []
+    subtotal = 0.0
+    for entry in session.get("cart", []):
+        product = catalogue.get(str(entry.get("product_id")))
+        if not product:
+            continue
+        variant = next((v for v in product.get("variants", []) if str(v["id"]) == str(entry.get("variant_id"))), None)
+        if product.get("variants") and variant is None:
+            continue
+        stock = int(variant["stock"] if variant else product.get("stock", 0))
+        quantity = min(max(1, int(entry.get("quantity", 1))), stock)
+        if stock <= 0:
+            continue
+        price = float(product["price"])
+        subtotal += price * quantity
+        label = " · ".join(str(variant[k]) for k in ("size", "colour", "edition", "fit", "finish", "option") if variant and variant.get(k))
+        items.append({"product": product, "variant": variant, "variant_label": label,
+                      "quantity": quantity, "stock": stock, "line_total": price * quantity,
+                      "variant_id": entry.get("variant_id", "")})
+    return items, round(subtotal, 2)
+
+
+@app.route("/cart")
+def view_cart():
+    items, subtotal = cart_details()
+    return render_template("cart.html", items=items, subtotal=subtotal)
+
+
+@app.route("/cart/add", methods=["POST"])
+def add_to_cart():
+    product_id = request.form.get("product_id", "")
+    variant_id = request.form.get("variant", "")
+    product = next((p for p in get_products() if str(p["id"]) == product_id), None)
+    if not product:
+        abort(404)
+    variant = next((v for v in product.get("variants", []) if str(v["id"]) == variant_id), None)
+    if product.get("variants") and variant is None:
+        flash("Please select a valid option.")
+        return redirect(url_for("product_detail", product_id=product["id"]))
+    try:
+        quantity = int(request.form.get("quantity", "1"))
+    except ValueError:
+        quantity = 0
+    stock = int(variant["stock"] if variant else product.get("stock", 0))
+    cart = list(session.get("cart", []))
+    existing = next((item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id), None)
+    current = int(existing["quantity"]) if existing else 0
+    if quantity < 1 or current + quantity > stock:
+        flash("Invalid quantity or not enough stock available.")
+        return redirect(url_for("product_detail", product_id=product["id"]))
+    if existing:
+        existing["quantity"] += quantity
+    else:
+        cart.append({"product_id": product_id, "variant_id": variant_id, "quantity": quantity})
+    session["cart"] = cart
+    flash("Added to cart.")
+    return redirect(url_for("view_cart"))
+
+
+@app.route("/cart/update", methods=["POST"])
+def update_cart():
+    product_id = request.form.get("product_id", "")
+    variant_id = request.form.get("variant_id", "")
+    product = next((p for p in get_products() if str(p["id"]) == product_id), None)
+    if not product:
+        abort(404)
+    variant = next((v for v in product.get("variants", []) if str(v["id"]) == variant_id), None)
+    if product.get("variants") and variant is None:
+        abort(400)
+    try:
+        quantity = int(request.form.get("quantity", "0"))
+    except ValueError:
+        quantity = -1
+    stock = int(variant["stock"] if variant else product.get("stock", 0))
+    cart = list(session.get("cart", []))
+    matching = [item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id]
+    if not matching:
+        abort(404)
+    if quantity == 0:
+        cart = [item for item in cart if item not in matching]
+    elif 1 <= quantity <= stock:
+        matching[0]["quantity"] = quantity
+    else:
+        flash("Quantity must be between 1 and available stock.")
+        return redirect(url_for("view_cart"))
+    session["cart"] = cart
+    return redirect(url_for("view_cart"))
 
 
 # runs when everything before it is correct

@@ -59,7 +59,7 @@
             </p>
 
             <!-- product options -->
-            <form id="productForm">
+            <form id="productForm" method="post" action="{{ url_for('add_to_cart') }}">
 
                 <input type="hidden" name="product_id" value="{{ product.id }}">
 
@@ -71,9 +71,17 @@
                         <option value="">Select an option</option>
 
                         {% for variant in product.variants %}
-                        <option value="{{ variant.id }}">
-                          {{ variant.size or variant.edition or variant.fit or variant.option or variant.colour }}
-                         </option>
+                        <option value="{{ variant.id }}"
+                                data-stock="{{ variant.stock | default(0) }}"
+                                {% if variant.stock | default(0) | int <= 0 %}disabled{% endif %}>
+                            {% if variant.size %}{{ variant.size }}{% endif %}
+                            {% if variant.colour %} · {{ variant.colour }}{% endif %}
+                            {% if variant.edition %} · {{ variant.edition }}{% endif %}
+                            {% if variant.fit %} · {{ variant.fit }}{% endif %}
+                            {% if variant.finish %} · {{ variant.finish }}{% endif %}
+                            {% if variant.option %} · {{ variant.option }}{% endif %}
+                            {% if variant.stock | default(0) | int <= 0 %} (Out of stock){% endif %}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -91,12 +99,14 @@
                                name="quantity"
                                value="1"
                                min="1"
-                               max="99"
+                               max="{{ product.stock | default(0) }}"
                                readonly>
 
                         <button type="button" id="increaseQuantity">+</button>
                     </div>
                 </div>
+
+                <p id="stockMessage" class="product-cart-message" aria-live="polite"></p>
 
                 <!-- cart button -->
                 <button type="submit" class="product-add-cart">
@@ -105,6 +115,7 @@
 
             </form>
 
+            {% for message in get_flashed_messages() %}<p class="product-cart-message">{{ message }}</p>{% endfor %}
             <p class="product-cart-message" id="cartMessage" aria-live="polite"></p>
 
             <div class="product-extra">
@@ -167,6 +178,6 @@
 
 </main>
 
-<script src="{{ url_for('static', filename='js/product.js') }}"></script>
+<script src="{{ url_for('static', filename='js/product/product.js') }}"></script>
 
 {% endblock %}
