@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, request, abort, session, redi
 import os
 import hmac
 import secrets
-from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats
+from database import initialise_database, seed_products, load_products, place_order, load_order, list_orders, order_stats, update_product
 
 # initialise flask application
 app = Flask(__name__)
@@ -1906,6 +1906,42 @@ def admin_order_detail(order_id):
     if not order:
         abort(404)
     return render_template("admin_order_detail.html", order=order, items=items)
+
+
+
+@app.route("/admin/products")
+def admin_products():
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    products = get_products()
+    for product in products:
+        product["available_stock"] = sum(int(v["stock"]) for v in product["variants"]) if product["variants"] else int(product["stock"])
+    query = request.args.get("q", "").strip()
+    if query:
+        products = [p for p in products if query.casefold() in p["name"].casefold() or query.casefold() in p["artist"].casefold()]
+    return render_template("admin_products.html", products=products, query=query)
+
+
+@app.route("/admin/products/<int:product_id>/edit", methods=["GET", "POST"])
+def admin_edit_product(product_id):
+    if not admin_authenticated():
+        return redirect(url_for("admin_login"))
+    product = next((p for p in get_products() if p["id"] == product_id), None)
+    if product is None:
+        abort(404)
+    if request.method == "POST":
+        if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
+            abort(403)
+        fields = {key: request.form.get(key, "") for key in ("name", "colour", "price", "stock")}
+        variant_stock = {str(v["id"]): request.form.get("stock_" + str(v["id"]), "") for v in product["variants"]}
+        try:
+            update_product(product_id, fields, variant_stock)
+        except ValueError as exc:
+            flash(str(exc))
+        else:
+            flash("Product updated successfully.")
+            return redirect(url_for("admin_edit_product", product_id=product_id))
+    return render_template("admin_edit_product.html", product=product)
 
 
 # runs when everything before it is correct
