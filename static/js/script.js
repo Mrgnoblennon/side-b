@@ -13,16 +13,16 @@ function closeGallery() {
 }
 
 // scroll merchandise left or right
-function scrollMerch(direction) {
+function scrollMerch(direction, carouselId = "merch-carousel") {
 
   // find the merchandise carousel
-  const carousel = document.getElementById("merch-carousel");
+  const carousel = document.getElementById(carouselId);
 
   // find the first product card
-  const card = carousel.querySelector(".merch-card");
+  const card = carousel?.querySelector(".merch-card");
 
   // stop if no products exist
-  if (!card) {
+  if (!carousel || !card) {
       return;
   }
 
