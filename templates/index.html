@@ -47,48 +47,23 @@
         </div>
     </section>
 
-    <!-- Each featured artist's complete merchandise collection -->
-    <section id="featured-collections" aria-label="Featured artist merchandise">
-      <h2 class="collections-title">Featured Merchandise</h2>
-      {% for artist in artists %}
-      <section class="artist-merch home-artist-collection" aria-labelledby="collection-heading-{{ artist.id }}">
-        <div class="artist-merch-content">
-          <div class="merch-heading">
-            <div>
-              <span class="section-label">FEATURED COLLECTION {{ "%02d"|format(loop.index) }}</span>
-              <h2 id="collection-heading-{{ artist.id }}">{{ artist.name }} Merchandise</h2>
-            </div>
-            {% if artist.merch|length > 3 %}
-            <div class="merch-controls">
-              <button type="button" onclick="scrollMerch(-1, 'home-merch-{{ artist.id }}')" aria-label="Previous {{ artist.name }} products">&#8592;</button>
-              <button type="button" onclick="scrollMerch(1, 'home-merch-{{ artist.id }}')" aria-label="Next {{ artist.name }} products">&#8594;</button>
-            </div>
-            {% endif %}
-          </div>
-          {% if artist.merch %}
-          <div class="merch-carousel" id="home-merch-{{ artist.id }}">
-            {% for product in artist.merch %}
-            <div class="merch-card">
-              <img src="{{ url_for('static', filename=product.image) if product.image else url_for('static', filename='images/placeholders/product-placeholder.png') }}"
-                   alt="{{ product.name }}"
-                   loading="lazy"
-                   onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/placeholders/product-placeholder.png') }}';">
-              <div class="merch-card-info">
-                <h3>{{ product.name }}</h3>
-                <p>${{ "%.2f"|format(product.price) }}</p>
-              </div>
-              <a href="{{ url_for('product_detail', product_id=product.id) }}" class="merch-add-button">View Product</a>
-            </div>
+    <!-- featured merchandise -->
+    <section id="merch">
+        <h2>Featured Merchandise</h2>
+        <div class="product-grid">
+            {% for artist in artists[:4] %}
+                {% if artist.merch %}
+                {% set product = artist.merch[0] %}
+                <div class="artist-card product-card">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" onerror="this.onerror=null; this.src='/static/images/placeholders/product-placeholder.png';">
+                    <h3>{{ product.name }}</h3>
+                    <p>${{ "%.2f"|format(product.price) }}</p>
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}">View Product</a>
+                </div>
+                {% endif %}
             {% endfor %}
-          </div>
-          {% else %}
-          <p class="collection-empty">No merchandise available for this artist yet.</p>
-          {% endif %}
-          <a href="{{ url_for('artist_page', slug=artist.slug) }}" class="collection-artist-link">Explore {{ artist.name }}</a>
         </div>
-      </section>
-      {% endfor %}
-      <div class="collection-shop-footer"><a href="{{ url_for('merch_shop') }}" class="shop-link">Explore All Merchandise</a></div>
+        <a href="{{ url_for('merch_shop') }}" class="shop-link">Explore All Merchandise</a>
     </section>
 
 </main>
