@@ -11,8 +11,7 @@
         <h2>Discover the sound.</h2>
         <p>Explore the artist.</p>
         <video class="hero-video" autoplay muted loop playsinline preload="metadata"
-               aria-label="SIDE B artist montage"
-               {% if hero_artist %}poster="{{ url_for('static', filename=hero_artist.image) }}"{% endif %}>
+               aria-label="SIDE B artist montage">
             <source src="{{ url_for('static', filename='videos/hero.mp4') }}" type="video/mp4">
             Your browser does not support background video.
         </video>
