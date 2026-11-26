@@ -70,7 +70,11 @@ def artist_page(slug):
 @app.context_processor
 def shared_navigation():
     # make the cart quantity available to every template
-    return {"cart_count": sum(max(0, int(item.get("quantity", 0))) for item in session.get("cart", []) if str(item.get("quantity", "")).isdigit())}
+    cart_count = 0
+    for item in session.get("cart", []):
+        if str(item.get("quantity", "")).isdigit():
+            cart_count += max(0, int(item.get("quantity", 0)))
+    return {"cart_count": cart_count}
 
 
 # Initialise and seed the SQLite catalogue on first startup only.
@@ -172,24 +176,28 @@ def product_detail(product_id):
     products = get_products()
 
     # find the product using its id
-    product = next(
-        (product for product in products if str(product.get("id")) == str(product_id)),
-        None,
-    )
+    product = None
+    for item in products:
+        if str(item.get("id")) == str(product_id):
+            product = item
+            break
 
-    print("PRODUCT IDS:", [product.get("id") for product in products])
+    product_ids = []
+    for item in products:
+        product_ids.append(item.get("id"))
+    print("PRODUCT IDS:", product_ids)
 
     # return a not found response if the product does not exist
     if product is None:
         abort(404)
 
     # get other products from the same artist
-    related_products = [
-        item
-        for item in products
-        if item["artist"] == product["artist"]
-        and str(item.get("id")) != str(product_id)
-    ][:4]
+    related_products = []
+    for item in products:
+        if item["artist"] == product["artist"] and str(item.get("id")) != str(product_id):
+            related_products.append(item)
+            if len(related_products) == 4:
+                break
 
     return render_template(
         "product.html",
@@ -201,14 +209,20 @@ def product_detail(product_id):
 # Cart stores only IDs and quantities; product details come from the catalogue.
 def cart_details():
     # retrieve current product details and calculate the cart subtotal
-    catalogue = {str(p["id"]): p for p in get_products()}
+    catalogue = {}
+    for product in get_products():
+        catalogue[str(product["id"])] = product
     items = []
     subtotal = 0.0
     for entry in session.get("cart", []):
         product = catalogue.get(str(entry.get("product_id")))
         if not product:
             continue
-        variant = next((v for v in product.get("variants", []) if str(v["id"]) == str(entry.get("variant_id"))), None)
+        variant = None
+        for v in product.get("variants", []):
+            if str(v["id"]) == str(entry.get("variant_id")):
+                variant = v
+                break
         if product.get("variants") and variant is None:
             continue
         # retrieve the available stock for the selected option
@@ -219,7 +233,11 @@ def cart_details():
         price = float(product["price"])
         # add the cost of this item to the subtotal
         subtotal += price * quantity
-        label = " · ".join(str(variant[k]) for k in ("size", "colour", "edition", "fit", "finish", "option") if variant and variant.get(k))
+        labels = []
+        for key in ("size", "colour", "edition", "fit", "finish", "option"):
+            if variant and variant.get(key):
+                labels.append(str(variant[key]))
+        label = " · ".join(labels)
         items.append({"product": product, "variant": variant, "variant_label": label,
                       "quantity": quantity, "stock": stock, "line_total": price * quantity,
                       "variant_id": entry.get("variant_id", "")})
@@ -238,10 +256,18 @@ def add_to_cart():
     # validate the selected product, option and quantity before saving the cart
     product_id = request.form.get("product_id", "")
     variant_id = request.form.get("variant", "")
-    product = next((p for p in get_products() if str(p["id"]) == product_id), None)
+    product = None
+    for p in get_products():
+        if str(p["id"]) == product_id:
+            product = p
+            break
     if not product:
         abort(404)
-    variant = next((v for v in product.get("variants", []) if str(v["id"]) == variant_id), None)
+    variant = None
+    for v in product.get("variants", []):
+        if str(v["id"]) == variant_id:
+            variant = v
+            break
     if product.get("variants") and variant is None:
         flash("Please select a valid option.")
         return redirect(url_for("product_detail", product_id=product["id"]))
@@ -254,7 +280,11 @@ def add_to_cart():
     # retrieve the available stock for the selected option
     stock = int(variant["stock"] if variant else product.get("stock", 0))
     cart = list(session.get("cart", []))
-    existing = next((item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id), None)
+    existing = None
+    for item in cart:
+        if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id:
+            existing = item
+            break
     current = int(existing["quantity"]) if existing else 0
     if quantity < 1 or current + quantity > stock:
         flash("Invalid quantity or not enough stock available.")
@@ -274,10 +304,18 @@ def update_cart():
     # change the quantity of an existing cart item or remove it
     product_id = request.form.get("product_id", "")
     variant_id = request.form.get("variant_id", "")
-    product = next((p for p in get_products() if str(p["id"]) == product_id), None)
+    product = None
+    for p in get_products():
+        if str(p["id"]) == product_id:
+            product = p
+            break
     if not product:
         abort(404)
-    variant = next((v for v in product.get("variants", []) if str(v["id"]) == variant_id), None)
+    variant = None
+    for v in product.get("variants", []):
+        if str(v["id"]) == variant_id:
+            variant = v
+            break
     if product.get("variants") and variant is None:
         abort(400)
     # attempt the operation and handle any expected errors
@@ -289,11 +327,18 @@ def update_cart():
     # retrieve the available stock for the selected option
     stock = int(variant["stock"] if variant else product.get("stock", 0))
     cart = list(session.get("cart", []))
-    matching = [item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id]
+    matching = []
+    for item in cart:
+        if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id:
+            matching.append(item)
     if not matching:
         abort(404)
     if quantity == 0:
-        cart = [item for item in cart if item not in matching]
+        remaining = []
+        for item in cart:
+            if item not in matching:
+                remaining.append(item)
+        cart = remaining
     elif 1 <= quantity <= stock:
         matching[0]["quantity"] = quantity
     else:
@@ -314,7 +359,9 @@ def checkout():
         return redirect(url_for("view_cart"))
     # only process submitted form data on a post request
     if request.method == "POST":
-        customer = {key: request.form.get(key, "").strip() for key in ("name", "email", "phone", "suburb")}
+        customer = {}
+        for key in ("name", "email", "phone", "suburb"):
+            customer[key] = request.form.get(key, "").strip()
         # Validate on the server too: browser-side required/type checks can be bypassed.
         errors = []
         if not 2 <= len(customer["name"]) <= 100 or not re.fullmatch(r"[\w .,'’\-]+", customer["name"], re.UNICODE):
@@ -502,7 +549,11 @@ def admin_edit_product(product_id):
     # load the selected product and save submitted changes
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    product = next((p for p in get_products(include_archived=True) if p["id"] == product_id), None)
+    product = None
+    for p in get_products(include_archived=True):
+        if p["id"] == product_id:
+            product = p
+            break
     # return a not found response if the product does not exist
     if product is None:
         abort(404)
@@ -512,8 +563,12 @@ def admin_edit_product(product_id):
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
         # collect the submitted form fields
-        fields = {key: request.form.get(key, "") for key in ("name", "category", "description", "colour", "price", "stock")}
-        variant_stock = {str(v["id"]): str(v["stock"]) for v in product["variants"]}
+        fields = {}
+        for key in ("name", "category", "description", "colour", "price", "stock"):
+            fields[key] = request.form.get(key, "")
+        variant_stock = {}
+        for variant in product["variants"]:
+            variant_stock[str(variant["id"])] = str(variant["stock"])
         # attempt the operation and handle any expected errors
         try:
             fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (product.get("image") or ""))
@@ -618,7 +673,11 @@ def admin_artist_form(artist_id=None):
     # handle both creating and editing an artist
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
-    artist = next((a for a in load_artists(include_archived=True) if a["id"] == artist_id), None)
+    artist = None
+    for a in load_artists(include_archived=True):
+        if a["id"] == artist_id:
+            artist = a
+            break
     if artist_id is not None and artist is None:
         abort(404)
     # only process submitted form data on a post request
@@ -629,15 +688,21 @@ def admin_artist_form(artist_id=None):
         # attempt the operation and handle any expected errors
         try:
             # collect the submitted form fields
-            fields = {key: request.form.get(key, "") for key in
-                      ("name", "slug", "genre", "description", "biography")}
+            fields = {}
+            for key in ("name", "slug", "genre", "description", "biography"):
+                fields[key] = request.form.get(key, "")
             fields["featured"] = request.form.get("featured") == "1"
             fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (artist["image"] if artist else ""))
             fields["portrait"] = store_image(request.files.get("portrait"), "" if request.form.get("remove_portrait") == "1" else (artist["portrait"] if artist else ""))
             existing_gallery = list(artist["gallery"]) if artist else []
             removed = set(request.form.getlist("remove_gallery"))
-            gallery = [path for path in existing_gallery if path not in removed]
-            gallery.extend(store_image(upload) for upload in request.files.getlist("gallery") if upload.filename)
+            gallery = []
+            for path in existing_gallery:
+                if path not in removed:
+                    gallery.append(path)
+            for upload in request.files.getlist("gallery"):
+                if upload.filename:
+                    gallery.append(store_image(upload))
             fields["gallery"] = gallery
             saved_id = save_artist(fields, artist_id)
         # display the validation error instead of crashing
@@ -662,8 +727,9 @@ def admin_new_product():
         # attempt the operation and handle any expected errors
         try:
             # collect the submitted form fields
-            fields = {key: request.form.get(key, "") for key in
-                      ("artist_id", "name", "category", "description", "price", "colour", "stock")}
+            fields = {}
+            for key in ("artist_id", "name", "category", "description", "price", "colour", "stock"):
+                fields[key] = request.form.get(key, "")
             fields["image"] = store_image(request.files.get("image"))
             product_id = create_product(fields)
         # display the validation error instead of crashing
