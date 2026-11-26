@@ -97,15 +97,30 @@ def get_products(include_archived=False):
 # merch shop page
 @app.route("/shop")
 def merch_shop():
-    # load products and apply the selected shop filters
+    # load all products
     products = get_products()
-    categories = [c for c in list_categories() if any(p["category"].casefold() == c.casefold() for p in products)]
-    artist_names = sorted(set(p["artist"] for p in products))
+
+    # only include categories that have products
+    categories = []
+    for category in list_categories():
+        for product in products:
+            if product["category"].casefold() == category.casefold():
+                categories.append(category)
+                break
+
+    # collect artist names without duplicates
+    artist_names = []
+    for product in products:
+        if product["artist"] not in artist_names:
+            artist_names.append(product["artist"])
+    artist_names.sort()
+
     # retrieve the selected filters from the url
     selected_category = request.args.get("category", "All")
     selected_artist = request.args.get("artist", "All")
     selected_sort = request.args.get("sort", "default")
 
+    # reset invalid filters
     if selected_category not in categories:
         selected_category = "All"
     if selected_artist not in artist_names:
@@ -113,18 +128,39 @@ def merch_shop():
     if selected_sort not in ("default", "price_asc", "price_desc", "name_asc"):
         selected_sort = "default"
 
+    # filter products by category
     if selected_category != "All":
-        products = [p for p in products if p["category"] == selected_category]
+        filtered_products = []
+        for product in products:
+            if product["category"] == selected_category:
+                filtered_products.append(product)
+        products = filtered_products
+
+    # filter products by artist
     if selected_artist != "All":
-        products = [p for p in products if p["artist"] == selected_artist]
+        filtered_products = []
+        for product in products:
+            if product["artist"] == selected_artist:
+                filtered_products.append(product)
+        products = filtered_products
 
+    # return the price used to sort each product
+    def product_price(product):
+        return float(product["price"])
+
+    # return the name used to sort each product
+    def product_name(product):
+        return product["name"].casefold()
+
+    # sort products using the selected option
     if selected_sort == "price_asc":
-        products.sort(key=lambda p: float(p["price"]))
+        products.sort(key=product_price)
     elif selected_sort == "price_desc":
-        products.sort(key=lambda p: float(p["price"]), reverse=True)
+        products.sort(key=product_price, reverse=True)
     elif selected_sort == "name_asc":
-        products.sort(key=lambda p: p["name"].casefold())
+        products.sort(key=product_name)
 
+    # send the filtered products and selected options to the template
     return render_template("shop.html", products=products, categories=categories,
                            artist_names=artist_names, selected_category=selected_category,
                            selected_artist=selected_artist, selected_sort=selected_sort)
