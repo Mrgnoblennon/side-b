@@ -466,16 +466,34 @@ def admin_category_archive():
 
 @app.route("/admin/products")
 def admin_products():
-    # load products including archived items and apply the search query
+    # check that the admin is logged in
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+
+    # load products including archived products
     products = get_products(include_archived=True)
-    # loop through each product
+
+    # calculate the available stock for each product
     for product in products:
-        product["available_stock"] = sum(int(v["stock"]) for v in product["variants"]) if product["variants"] else int(product["stock"])
+        if product["variants"]:
+            total_stock = 0
+            for variant in product["variants"]:
+                total_stock += int(variant["stock"])
+            product["available_stock"] = total_stock
+        else:
+            product["available_stock"] = int(product["stock"])
+
+    # retrieve the search query
     query = request.args.get("q", "").strip()
+
+    # find products matching the name or artist
     if query:
-        products = [p for p in products if query.casefold() in p["name"].casefold() or query.casefold() in p["artist"].casefold()]
+        filtered_products = []
+        for product in products:
+            if query.casefold() in product["name"].casefold() or query.casefold() in product["artist"].casefold():
+                filtered_products.append(product)
+        products = filtered_products
+
     return render_template("admin_products.html", products=products, query=query)
 
 
