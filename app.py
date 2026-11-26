@@ -25,10 +25,19 @@ def home():
     # sends a response back to the browser
     catalogue = load_artists()
     products = get_products()
-    featured = [a for a in catalogue if a.get("featured")]
-    featured = (featured + [a for a in catalogue if a not in featured])[:4]
+    featured = []
+    for artist in catalogue:
+        if artist.get("featured"):
+            featured.append(artist)
+    for artist in catalogue:
+        if artist not in featured:
+            featured.append(artist)
+    featured = featured[:4]
     for artist in featured:
-        artist["merch"] = [p for p in products if p["artist_id"] == artist["id"]]
+        artist["merch"] = []
+        for product in products:
+            if product["artist_id"] == artist["id"]:
+                artist["merch"].append(product)
     return render_template("index.html", artists=featured, hero_artist=secrets.choice(featured) if featured else None)
 
 
@@ -43,7 +52,10 @@ def artist_page(slug):
     # Find the artist matching the URL slug
     for artist in load_artists():
         if artist["slug"] == slug:
-            artist["merch"] = [p for p in get_products() if p["artist_id"] == artist["id"]]
+            artist["merch"] = []
+            for product in get_products():
+                if product["artist_id"] == artist["id"]:
+                    artist["merch"].append(product)
             return render_template("artist.html", artist=artist)
 
     return "Artist not found", 404
@@ -62,9 +74,14 @@ seed_artists(sample_artists)
 
 def get_products(include_archived=False):
     products = load_products(include_archived=include_archived)
-    artist_names = {artist["id"]: artist["name"] for artist in load_artists(include_archived=True)}
+    artists = load_artists(include_archived=True)
+
     for product in products:
-        product["artist"] = artist_names.get(product["artist_id"], "Unknown Artist")
+        product["artist"] = "Unknown Artist"
+        for artist in artists:
+            if product["artist_id"] == artist["id"]:
+                product["artist"] = artist["name"]
+                break
     return products
 
 
