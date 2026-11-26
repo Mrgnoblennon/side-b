@@ -22,19 +22,23 @@ from seed_data import artists as sample_artists
 @app.route("/")
 # define route function that will handle reququests
 def home():
+    # load the catalogue and choose up to four featured artists
     # sends a response back to the browser
     catalogue = load_artists()
     products = get_products()
     featured = []
+    # loop through the available artists
     for artist in catalogue:
         if artist.get("featured"):
             featured.append(artist)
+    # loop through the available artists
     for artist in catalogue:
         if artist not in featured:
             featured.append(artist)
     featured = featured[:4]
     for artist in featured:
         artist["merch"] = []
+        # loop through each product
         for product in products:
             if product["artist_id"] == artist["id"]:
                 artist["merch"].append(product)
@@ -43,11 +47,13 @@ def home():
 
 @app.route("/artists")
 def artists_page():
+    # display all active artists
     return render_template("artists.html", artists=load_artists())
 
 
 @app.route("/artists/<slug>")
 def artist_page(slug):
+    # find the artist using the slug from the url
 
     # Find the artist matching the URL slug
     for artist in load_artists():
@@ -63,6 +69,7 @@ def artist_page(slug):
 
 @app.context_processor
 def shared_navigation():
+    # make the cart quantity available to every template
     return {"cart_count": sum(max(0, int(item.get("quantity", 0))) for item in session.get("cart", []) if str(item.get("quantity", "")).isdigit())}
 
 
@@ -73,9 +80,11 @@ seed_artists(sample_artists)
 
 
 def get_products(include_archived=False):
+    # match each product to its artist using the artist id
     products = load_products(include_archived=include_archived)
     artists = load_artists(include_archived=True)
 
+    # loop through each product
     for product in products:
         product["artist"] = "Unknown Artist"
         for artist in artists:
@@ -88,9 +97,11 @@ def get_products(include_archived=False):
 # merch shop page
 @app.route("/shop")
 def merch_shop():
+    # load products and apply the selected shop filters
     products = get_products()
     categories = [c for c in list_categories() if any(p["category"].casefold() == c.casefold() for p in products)]
     artist_names = sorted(set(p["artist"] for p in products))
+    # retrieve the selected filters from the url
     selected_category = request.args.get("category", "All")
     selected_artist = request.args.get("artist", "All")
     selected_sort = request.args.get("sort", "default")
@@ -121,6 +132,7 @@ def merch_shop():
 # individual product page
 @app.route("/shop/<int:product_id>")
 def product_detail(product_id):
+    # find the requested product and related merchandise
     products = get_products()
 
     # find the product using its id
@@ -131,6 +143,7 @@ def product_detail(product_id):
 
     print("PRODUCT IDS:", [product.get("id") for product in products])
 
+    # return a not found response if the product does not exist
     if product is None:
         abort(404)
 
@@ -151,6 +164,7 @@ def product_detail(product_id):
 
 # Cart stores only IDs and quantities; product details come from the catalogue.
 def cart_details():
+    # retrieve current product details and calculate the cart subtotal
     catalogue = {str(p["id"]): p for p in get_products()}
     items = []
     subtotal = 0.0
@@ -161,11 +175,13 @@ def cart_details():
         variant = next((v for v in product.get("variants", []) if str(v["id"]) == str(entry.get("variant_id"))), None)
         if product.get("variants") and variant is None:
             continue
+        # retrieve the available stock for the selected option
         stock = int(variant["stock"] if variant else product.get("stock", 0))
         quantity = min(max(1, int(entry.get("quantity", 1))), stock)
         if stock <= 0:
             continue
         price = float(product["price"])
+        # add the cost of this item to the subtotal
         subtotal += price * quantity
         label = " · ".join(str(variant[k]) for k in ("size", "colour", "edition", "fit", "finish", "option") if variant and variant.get(k))
         items.append({"product": product, "variant": variant, "variant_label": label,
@@ -176,12 +192,14 @@ def cart_details():
 
 @app.route("/cart")
 def view_cart():
+    # display the cart and its calculated subtotal
     items, subtotal = cart_details()
     return render_template("cart.html", items=items, subtotal=subtotal)
 
 
 @app.route("/cart/add", methods=["POST"])
 def add_to_cart():
+    # validate the selected product, option and quantity before saving the cart
     product_id = request.form.get("product_id", "")
     variant_id = request.form.get("variant", "")
     product = next((p for p in get_products() if str(p["id"]) == product_id), None)
@@ -191,10 +209,13 @@ def add_to_cart():
     if product.get("variants") and variant is None:
         flash("Please select a valid option.")
         return redirect(url_for("product_detail", product_id=product["id"]))
+    # attempt the operation and handle any expected errors
     try:
+        # convert the submitted quantity from text to an integer
         quantity = int(request.form.get("quantity", "1"))
     except ValueError:
         quantity = 0
+    # retrieve the available stock for the selected option
     stock = int(variant["stock"] if variant else product.get("stock", 0))
     cart = list(session.get("cart", []))
     existing = next((item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id), None)
@@ -206,6 +227,7 @@ def add_to_cart():
         existing["quantity"] += quantity
     else:
         cart.append({"product_id": product_id, "variant_id": variant_id, "quantity": quantity})
+    # save the updated cart in the session
     session["cart"] = cart
     flash("Added to cart.")
     return redirect(url_for("view_cart"))
@@ -213,6 +235,7 @@ def add_to_cart():
 
 @app.route("/cart/update", methods=["POST"])
 def update_cart():
+    # change the quantity of an existing cart item or remove it
     product_id = request.form.get("product_id", "")
     variant_id = request.form.get("variant_id", "")
     product = next((p for p in get_products() if str(p["id"]) == product_id), None)
@@ -221,10 +244,13 @@ def update_cart():
     variant = next((v for v in product.get("variants", []) if str(v["id"]) == variant_id), None)
     if product.get("variants") and variant is None:
         abort(400)
+    # attempt the operation and handle any expected errors
     try:
+        # convert the submitted quantity from text to an integer
         quantity = int(request.form.get("quantity", "0"))
     except ValueError:
         quantity = -1
+    # retrieve the available stock for the selected option
     stock = int(variant["stock"] if variant else product.get("stock", 0))
     cart = list(session.get("cart", []))
     matching = [item for item in cart if str(item["product_id"]) == product_id and str(item.get("variant_id", "")) == variant_id]
@@ -237,6 +263,7 @@ def update_cart():
     else:
         flash("Quantity must be between 1 and available stock.")
         return redirect(url_for("view_cart"))
+    # save the updated cart in the session
     session["cart"] = cart
     return redirect(url_for("view_cart"))
 
@@ -244,10 +271,12 @@ def update_cart():
 # Simulated checkout: no payment details are collected.
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
+    # validate customer details and save the order before sending an email
     items, subtotal = cart_details()
     if not session.get("cart") or not items:
         flash("Add something to your cart before checking out.")
         return redirect(url_for("view_cart"))
+    # only process submitted form data on a post request
     if request.method == "POST":
         customer = {key: request.form.get(key, "").strip() for key in ("name", "email", "phone", "suburb")}
         # Validate on the server too: browser-side required/type checks can be bypassed.
@@ -265,13 +294,16 @@ def checkout():
             for error in errors:
                 flash(error)
         else:
+            # attempt the operation and handle any expected errors
             try:
                 order_id = place_order(customer, session["cart"])
+            # display the validation error instead of crashing
             except ValueError as exc:
                 flash(str(exc))
                 return redirect(url_for("view_cart"))
             # Save the order before sending; email failure must not undo checkout.
             email_status = "not_configured"
+            # attempt the operation and handle any expected errors
             try:
                 saved_order, saved_items = load_order(order_id)
                 if send_order_confirmation(saved_order, saved_items):
@@ -288,6 +320,7 @@ def checkout():
 
 @app.route("/order/<int:order_id>")
 def order_confirmation(order_id):
+    # only display the order associated with this browser session
     if session.get("last_order_id") != order_id:
         abort(404)
     order, items = load_order(order_id)
@@ -299,17 +332,21 @@ def order_confirmation(order_id):
 
 # Admin access is disabled until SIDE_B_ADMIN_PASSWORD is configured.
 def admin_authenticated():
+    # check that admin access is configured and the session is authenticated
     return bool(os.environ.get("SIDE_B_ADMIN_PASSWORD")) and session.get("admin_authenticated") is True
 
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+    # check the supplied password and create an authenticated session
     if admin_authenticated():
         return redirect(url_for("admin_orders"))
     configured_password = os.environ.get("SIDE_B_ADMIN_PASSWORD", "")
+    # only process submitted form data on a post request
     if request.method == "POST":
         supplied = request.form.get("password", "")
         if configured_password and hmac.compare_digest(supplied, configured_password):
+            # remove the existing session data
             session.clear()
             session["admin_authenticated"] = True
             session["admin_csrf"] = secrets.token_urlsafe(32)
@@ -320,16 +357,20 @@ def admin_login():
 
 @app.route("/admin/logout", methods=["POST"])
 def admin_logout():
+    # validate the logout request and clear the session
     if not admin_authenticated():
         abort(403)
+    # check the security token before accepting changes
     if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
         abort(403)
+    # remove the existing session data
     session.clear()
     return redirect(url_for("admin_login"))
 
 
 @app.route("/admin/orders")
 def admin_orders():
+    # display order history and statistics to the admin
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     return render_template("admin_orders.html", orders=list_orders(), stats=order_stats())
@@ -337,6 +378,7 @@ def admin_orders():
 
 @app.route("/admin/orders/<int:order_id>")
 def admin_order_detail(order_id):
+    # retrieve the selected order and its items
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     order, items = load_order(order_id)
@@ -348,13 +390,18 @@ def admin_order_detail(order_id):
 
 @app.route("/admin/categories", methods=["GET", "POST"])
 def admin_categories():
+    # display categories and handle new category submissions
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+    # only process submitted form data on a post request
     if request.method == "POST":
+        # check the security token before accepting changes
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
+        # attempt the operation and handle any expected errors
         try:
             create_category(request.form.get("name", ""))
+        # display the validation error instead of crashing
         except ValueError as exc:
             flash(str(exc))
         else:
@@ -365,12 +412,16 @@ def admin_categories():
 
 @app.route("/admin/categories/archive", methods=["POST"])
 def admin_category_archive():
+    # archive or restore the selected category
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+    # check the security token before accepting changes
     if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
         abort(403)
+    # attempt the operation and handle any expected errors
     try:
         archive_category(request.form.get("name", ""), request.form.get("archived") == "1")
+    # return a not found response if the record does not exist
     except LookupError:
         abort(404)
     flash("Category status updated.")
@@ -379,9 +430,11 @@ def admin_category_archive():
 
 @app.route("/admin/products")
 def admin_products():
+    # load products including archived items and apply the search query
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     products = get_products(include_archived=True)
+    # loop through each product
     for product in products:
         product["available_stock"] = sum(int(v["stock"]) for v in product["variants"]) if product["variants"] else int(product["stock"])
     query = request.args.get("q", "").strip()
@@ -392,19 +445,26 @@ def admin_products():
 
 @app.route("/admin/products/<int:product_id>/edit", methods=["GET", "POST"])
 def admin_edit_product(product_id):
+    # load the selected product and save submitted changes
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     product = next((p for p in get_products(include_archived=True) if p["id"] == product_id), None)
+    # return a not found response if the product does not exist
     if product is None:
         abort(404)
+    # only process submitted form data on a post request
     if request.method == "POST":
+        # check the security token before accepting changes
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
+        # collect the submitted form fields
         fields = {key: request.form.get(key, "") for key in ("name", "category", "description", "colour", "price", "stock")}
         variant_stock = {str(v["id"]): str(v["stock"]) for v in product["variants"]}
+        # attempt the operation and handle any expected errors
         try:
             fields["image"] = store_image(request.files.get("image"), "" if request.form.get("remove_image") == "1" else (product.get("image") or ""))
             update_product(product_id, fields, variant_stock)
+        # display the validation error instead of crashing
         except ValueError as exc:
             flash(str(exc))
         else:
@@ -416,15 +476,20 @@ def admin_edit_product(product_id):
 
 @app.route("/admin/products/<int:product_id>/variants/new", methods=["POST"])
 def admin_add_variant(product_id):
+    # validate the admin request and add a product option
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+    # check the security token before accepting changes
     if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
         abort(403)
+    # attempt the operation and handle any expected errors
     try:
         add_product_variant(product_id, {key: request.form.get(key, "") for key in
                             ("size", "edition", "fit", "finish", "option", "stock")})
+    # display the validation error instead of crashing
     except ValueError as exc:
         flash(str(exc))
+    # return a not found response if the record does not exist
     except LookupError:
         abort(404)
     else:
@@ -434,15 +499,20 @@ def admin_add_variant(product_id):
 
 @app.route("/admin/products/<int:product_id>/variants/<variant_id>/edit", methods=["POST"])
 def admin_edit_variant(product_id, variant_id):
+    # update an existing product option
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+    # check the security token before accepting changes
     if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
         abort(403)
+    # attempt the operation and handle any expected errors
     try:
         edit_product_variant(product_id, variant_id, {key: request.form.get(key, "") for key in
                              ("size", "edition", "fit", "finish", "option", "stock")})
+    # display the validation error instead of crashing
     except ValueError as exc:
         flash(str(exc))
+    # return a not found response if the record does not exist
     except LookupError:
         abort(404)
     else:
@@ -456,11 +526,14 @@ app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
 
 
 def store_image(upload, existing=""):
+    # validate the uploaded image before saving it to the static folder
     if not upload or not upload.filename:
         return existing
+    # extract the file extension from the safe filename
     extension = Path(secure_filename(upload.filename)).suffix.lower()
     if extension not in UPLOAD_EXTENSIONS:
         raise ValueError("Upload a JPG, PNG, WebP or GIF image.")
+    # read the file header to check the actual image type
     header = upload.stream.read(32)
     upload.stream.seek(0)
     valid = (header.startswith(bytes.fromhex("ffd8ff")) and extension in {".jpg", ".jpeg"}) or (
@@ -469,6 +542,7 @@ def store_image(upload, existing=""):
         header.startswith(b"RIFF") and header[8:12] == b"WEBP" and extension == ".webp")
     if not valid:
         raise ValueError("That file is not a recognised image.")
+    # set the destination folder for uploaded images
     folder = Path(app.static_folder) / "images" / "uploads"
     folder.mkdir(parents=True, exist_ok=True)
     filename = uuid4().hex + extension
@@ -478,6 +552,7 @@ def store_image(upload, existing=""):
 
 @app.route("/admin/artists")
 def admin_artists():
+    # display active and archived artists
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     return render_template("admin_artists.html", artists=load_artists(include_archived=True))
@@ -486,15 +561,20 @@ def admin_artists():
 @app.route("/admin/artists/new", methods=["GET", "POST"])
 @app.route("/admin/artists/<int:artist_id>/edit", methods=["GET", "POST"])
 def admin_artist_form(artist_id=None):
+    # handle both creating and editing an artist
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     artist = next((a for a in load_artists(include_archived=True) if a["id"] == artist_id), None)
     if artist_id is not None and artist is None:
         abort(404)
+    # only process submitted form data on a post request
     if request.method == "POST":
+        # check the security token before accepting changes
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
+        # attempt the operation and handle any expected errors
         try:
+            # collect the submitted form fields
             fields = {key: request.form.get(key, "") for key in
                       ("name", "slug", "genre", "description", "biography")}
             fields["featured"] = request.form.get("featured") == "1"
@@ -506,6 +586,7 @@ def admin_artist_form(artist_id=None):
             gallery.extend(store_image(upload) for upload in request.files.getlist("gallery") if upload.filename)
             fields["gallery"] = gallery
             saved_id = save_artist(fields, artist_id)
+        # display the validation error instead of crashing
         except ValueError as exc:
             flash(str(exc))
         else:
@@ -516,16 +597,22 @@ def admin_artist_form(artist_id=None):
 
 @app.route("/admin/products/new", methods=["GET", "POST"])
 def admin_new_product():
+    # collect the submitted product details and save the new product
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
+    # only process submitted form data on a post request
     if request.method == "POST":
+        # check the security token before accepting changes
         if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
             abort(403)
+        # attempt the operation and handle any expected errors
         try:
+            # collect the submitted form fields
             fields = {key: request.form.get(key, "") for key in
                       ("artist_id", "name", "category", "description", "price", "colour", "stock")}
             fields["image"] = store_image(request.files.get("image"))
             product_id = create_product(fields)
+        # display the validation error instead of crashing
         except ValueError as exc:
             flash(str(exc))
         else:
@@ -536,14 +623,18 @@ def admin_new_product():
 
 @app.route("/admin/<kind>/<int:record_id>/archive", methods=["POST"])
 def admin_archive(kind, record_id):
+    # archive or restore an artist or product
     if not admin_authenticated():
         return redirect(url_for("admin_login"))
     if kind not in ("artists", "products"):
         abort(404)
+    # check the security token before accepting changes
     if not hmac.compare_digest(request.form.get("csrf_token", ""), session.get("admin_csrf", "")):
         abort(403)
+    # attempt the operation and handle any expected errors
     try:
         set_archived(kind, record_id, request.form.get("archived") == "1")
+    # return a not found response if the record does not exist
     except LookupError:
         abort(404)
     flash(("Archived" if request.form.get("archived") == "1" else "Restored") + " successfully.")
